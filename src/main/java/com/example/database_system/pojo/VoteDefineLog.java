@@ -1,10 +1,10 @@
 package com.example.database_system.pojo;
 
 
+import com.example.database_system.pojo.user.User;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.UUID;
 
 @Table (name = "tb_vote_define_manager")

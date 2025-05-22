@@ -1,9 +1,11 @@
 package com.example.database_system.pojo;
 
+import com.example.database_system.pojo.user.User;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Table(name = "tb_vote")
@@ -27,13 +29,15 @@ public class Vote {
     private User creatorId;
 
     @OneToMany(mappedBy = "vote")
-    private ArrayList<VoteDefineLog> voteDefineLogs;
+    private List<VoteDefineLog> voteDefineLogs = new ArrayList<>();
 
     @OneToMany(mappedBy = "vote",cascade = CascadeType.ALL)
-    private ArrayList<VoteOption> voteOptions;
+    private List<VoteOption> voteOptions = new ArrayList<>();
 
     @OneToMany(mappedBy = "vote",cascade = CascadeType.ALL)
-    private ArrayList<TicketLimit> ticketLimits;
+    private List<TicketLimit> ticketLimits = new ArrayList<>();
+
+
 
     public UUID getId() {
         return id;
@@ -83,27 +87,27 @@ public class Vote {
         this.creatorId = creatorId;
     }
 
-    public ArrayList<VoteDefineLog> getVoteDefineLogs() {
+    public List<VoteDefineLog> getVoteDefineLogs() {
         return voteDefineLogs;
     }
 
-    public void setVoteDefineLogs(ArrayList<VoteDefineLog> voteDefineLogs) {
+    public void setVoteDefineLogs(List<VoteDefineLog> voteDefineLogs) {
         this.voteDefineLogs = voteDefineLogs;
     }
 
-    public ArrayList<VoteOption> getVoteOptions() {
+    public List<VoteOption> getVoteOptions() {
         return voteOptions;
     }
 
-    public void setVoteOptions(ArrayList<VoteOption> voteOptions) {
+    public void setVoteOptions(List<VoteOption> voteOptions) {
         this.voteOptions = voteOptions;
     }
 
-    public ArrayList<TicketLimit> getTicketLimits() {
+    public List<TicketLimit> getTicketLimits() {
         return ticketLimits;
     }
 
-    public void setTicketLimits(ArrayList<TicketLimit> ticketLimits) {
+    public void setTicketLimits(List<TicketLimit> ticketLimits) {
         this.ticketLimits = ticketLimits;
     }
 }

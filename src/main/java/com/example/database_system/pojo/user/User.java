@@ -1,8 +1,12 @@
-package com.example.database_system.pojo;
+package com.example.database_system.pojo.user;
 
+import com.example.database_system.pojo.Vote;
+import com.example.database_system.pojo.VoteDefineLog;
+import com.example.database_system.pojo.dto.LoginRegisterUserDto;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Table(name = "tb_user",indexes = {
@@ -24,10 +28,15 @@ public class User {
     private Integer role;
 
     @OneToMany(mappedBy = "creatorId")
-    private ArrayList<Vote> votes;
+    private List<Vote> votes= new ArrayList<>(); ;
 
     @OneToMany(mappedBy = "operator")
-    private ArrayList<VoteDefineLog> voteDefineLogs;
+    private List<VoteDefineLog> voteDefineLogs = new ArrayList<>(); ;
+
+    public User(){
+        this.name = "default_name";
+    }
+
     public String getAccount() {
         return account;
     }
@@ -36,7 +45,7 @@ public class User {
         this.account = account;
     }
 
-    public ArrayList<Vote> getVotes() {
+    public List<Vote> getVotes() {
         return votes;
     }
 
@@ -44,11 +53,11 @@ public class User {
         this.votes = votes;
     }
 
-    public ArrayList<VoteDefineLog> getVoteDefineLogs() {
+    public List<VoteDefineLog> getVoteDefineLogs() {
         return voteDefineLogs;
     }
 
-    public void setVoteDefineLogs(ArrayList<VoteDefineLog> voteDefineLogs) {
+    public void setVoteDefineLogs(List<VoteDefineLog> voteDefineLogs) {
         this.voteDefineLogs = voteDefineLogs;
     }
 

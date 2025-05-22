@@ -1,5 +1,6 @@
 package com.example.database_system.pojo;
 
+import com.example.database_system.pojo.user.User;
 import jakarta.persistence.*;
 
 import java.util.UUID;
