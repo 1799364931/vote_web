@@ -2,9 +2,9 @@ package com.example.database_system.pojo.response;
 
 import com.example.database_system.pojo.user.User;
 
-public class UserServiceResponse {
+public class UserServiceResponse extends Response {
 
-    public enum ResponseCode{
+    public enum ResponseCode {
         USER_NOT_EXIST,
         USER_EXIST,
         LOGIN_PASSWORD_ERROR,

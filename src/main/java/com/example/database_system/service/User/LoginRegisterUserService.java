@@ -1,4 +1,4 @@
-package com.example.database_system.service;
+package com.example.database_system.service.User;
 
 import com.example.database_system.config.SecurityConfig;
 import com.example.database_system.pojo.response.UserServiceResponse;

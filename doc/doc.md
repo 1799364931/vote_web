@@ -33,11 +33,19 @@ fetch("http://localhost:8888/protected-endpoint", {
 ```
 
 后端解析token:
+
 ```java
 
- // @RequestHeader("Authorization") String authorizationHeader
+// @RequestHeader("Authorization") String authorizationHeader
 
 ```
+
+### 2.2 投票逻辑
+
++ 显示所有投票信息
++ 单个投票的信息显示
++ 创建投票
++ 考虑多轮投票？
 
 ## 3 网页路由
 

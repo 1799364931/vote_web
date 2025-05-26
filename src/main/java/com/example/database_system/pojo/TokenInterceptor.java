@@ -25,7 +25,7 @@ public class TokenInterceptor implements HandlerInterceptor {
             return true; // 直接放行
         }
 
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader("Authorization").replace("Bearer", "");
         String userAccount = jwtUtils.getAccountFromToken(token);
 
         if (!token.equals(TokenStorage.getToken(userAccount))) {

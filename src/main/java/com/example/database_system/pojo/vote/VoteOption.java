@@ -15,9 +15,15 @@ public class VoteOption {
     private String description;
     @Column(name = "vote_count")
     private Integer voteCount;
+    @Column(name = "position")
+    private Integer position;
     @ManyToOne
     @JoinColumn(name = "vote_id")
     private Vote vote;
+
+    public VoteOption() {
+        voteCount = 0;
+    }
 
     public UUID getId() {
         return id;
@@ -49,5 +55,13 @@ public class VoteOption {
 
     public void setVote(Vote vote) {
         this.vote = vote;
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
     }
 }

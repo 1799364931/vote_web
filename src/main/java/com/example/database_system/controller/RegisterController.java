@@ -4,7 +4,7 @@ import com.example.database_system.config.SecurityConfig;
 import com.example.database_system.pojo.response.ResponseMessage;
 import com.example.database_system.pojo.response.UserServiceResponse;
 import com.example.database_system.pojo.dto.LoginRegisterUserDto;
-import com.example.database_system.service.LoginRegisterUserService;
+import com.example.database_system.service.User.LoginRegisterUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

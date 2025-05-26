@@ -16,8 +16,6 @@ public class ResponseMessage<T> {
         this.token = token;
     }
 
-
-
     public ResponseMessage(Integer code,String message,T data) {
         this.code = code;
         this.message = message;
@@ -32,19 +30,21 @@ public class ResponseMessage<T> {
     }
 
 
-    public static <T> ResponseMessage<T> loginSuccess(T data,String message,String token){
-        return new ResponseMessage<T>(HttpStatus.OK.value(),message,data,token);
+    public static <T> ResponseMessage<T> loginSuccess(T data, String message, String token) {
+        return new ResponseMessage<T>(HttpStatus.OK.value(), message, data, token);
     }
 
-
+    public static <T> ResponseMessage<T> error(T data, String message, Integer code) {
+        return new ResponseMessage<>(code, message, data);
+    }
 
     //接口请求成功
-    public static <T> ResponseMessage<T> success(T data,String message){
-        return new ResponseMessage<T>(HttpStatus.OK.value(),message,data);
+    public static <T> ResponseMessage<T> success(T data, String message) {
+        return new ResponseMessage<T>(HttpStatus.OK.value(), message, data);
     }
 
-    public static <T> ResponseMessage<T> fail(T data,String message){
-        return new ResponseMessage<T>(HttpStatus.EXPECTATION_FAILED.value(),message,data);
+    public static <T> ResponseMessage<T> fail(T data, String message) {
+        return new ResponseMessage<T>(HttpStatus.EXPECTATION_FAILED.value(), message, data);
     }
 
     public Integer getCode() {

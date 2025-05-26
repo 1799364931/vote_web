@@ -18,7 +18,6 @@ public class TicketLimit {
     @Column(name = "count")
     private Integer count;
 
-
     @ManyToOne
     @JoinColumn(name = "vote_id")
     private Vote vote;
@@ -50,4 +49,11 @@ public class TicketLimit {
         this.ticket = ticket;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 }

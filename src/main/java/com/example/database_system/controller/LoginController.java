@@ -6,12 +6,8 @@ import com.example.database_system.pojo.TokenStorage;
 import com.example.database_system.pojo.response.ResponseMessage;
 import com.example.database_system.pojo.response.UserServiceResponse;
 import com.example.database_system.pojo.dto.LoginRegisterUserDto;
-import com.example.database_system.service.LoginRegisterUserService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import org.antlr.v4.runtime.Token;
+import com.example.database_system.service.User.LoginRegisterUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -43,7 +39,7 @@ public class LoginController {
             return ResponseMessage.fail(loginRegisterUserDto,"login fail ");
         }
         else{
-            String token = jwtUtils.generateToken(loginRegisterUserDto);
+            String token = jwtUtils.generateToken(response.getUser());
             //每次登录都 更新token
             TokenStorage.storeToken(loginRegisterUserDto.getAccount(),token);
             return ResponseMessage.loginSuccess(loginRegisterUserDto,"login success.", token);
