@@ -1,4 +1,4 @@
-package com.example.database_system.pojo;
+package com.example.database_system.pojo.response;
 
 import com.example.database_system.pojo.user.User;
 
@@ -14,7 +14,8 @@ public class UserServiceResponse {
         REGISTER_FAIL,
         REGISTER_SUCCESS,
         REMOVE_FAIL,
-        REMOVE_SUCCESS
+        REMOVE_SUCCESS,
+        EDIT_SUCCESS,
     }
 
     private String message;

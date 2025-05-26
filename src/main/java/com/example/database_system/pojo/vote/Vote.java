@@ -1,5 +1,7 @@
-package com.example.database_system.pojo;
+package com.example.database_system.pojo.vote;
 
+import com.example.database_system.pojo.ticket.TicketLimit;
+import com.example.database_system.pojo.record.VoteDefineLog;
 import com.example.database_system.pojo.user.User;
 import jakarta.persistence.*;
 

@@ -1,4 +1,4 @@
-package com.example.database_system.pojo;
+package com.example.database_system.pojo.vote;
 
 import jakarta.persistence.*;
 

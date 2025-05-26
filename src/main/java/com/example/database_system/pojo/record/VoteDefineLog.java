@@ -1,7 +1,8 @@
-package com.example.database_system.pojo;
+package com.example.database_system.pojo.record;
 
 
 import com.example.database_system.pojo.user.User;
+import com.example.database_system.pojo.vote.Vote;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;

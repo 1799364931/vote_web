@@ -1,7 +1,7 @@
 package com.example.database_system.service;
 
 import com.example.database_system.config.SecurityConfig;
-import com.example.database_system.pojo.UserServiceResponse;
+import com.example.database_system.pojo.response.UserServiceResponse;
 import com.example.database_system.pojo.dto.LoginRegisterUserDto;
 import com.example.database_system.pojo.user.User;
 import com.example.database_system.repository.UserRepository;

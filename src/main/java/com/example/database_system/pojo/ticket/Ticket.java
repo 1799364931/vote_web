@@ -1,6 +1,7 @@
-package com.example.database_system.pojo;
+package com.example.database_system.pojo.ticket;
 
 
+import com.example.database_system.pojo.ticket.TicketLimit;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

@@ -1,6 +1,8 @@
-package com.example.database_system.pojo;
+package com.example.database_system.pojo.record;
 
+import com.example.database_system.pojo.ticket.Ticket;
 import com.example.database_system.pojo.user.User;
+import com.example.database_system.pojo.vote.VoteOption;
 import jakarta.persistence.*;
 
 import java.util.UUID;

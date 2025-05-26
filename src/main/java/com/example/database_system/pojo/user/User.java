@@ -1,8 +1,7 @@
 package com.example.database_system.pojo.user;
 
-import com.example.database_system.pojo.Vote;
-import com.example.database_system.pojo.VoteDefineLog;
-import com.example.database_system.pojo.dto.LoginRegisterUserDto;
+import com.example.database_system.pojo.vote.Vote;
+import com.example.database_system.pojo.record.VoteDefineLog;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
