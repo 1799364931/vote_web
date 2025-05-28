@@ -2,6 +2,7 @@ package com.example.database_system.controller;
 
 import com.example.database_system.pojo.JwtUtils;
 import com.example.database_system.pojo.dto.TicketLimitDto;
+import com.example.database_system.pojo.dto.VoteCreateRequestDto;
 import com.example.database_system.pojo.dto.VoteDto;
 import com.example.database_system.pojo.dto.VoteOptionDto;
 import com.example.database_system.pojo.response.ResponseMessage;
@@ -31,10 +32,13 @@ public class VoteController {
     }
 
     @PostMapping("api/create")
-    public ResponseMessage<VoteDto> createVote(HttpServletRequest request, @RequestBody List<VoteOptionDto> voteOptionDtoList, @RequestBody VoteDto voteDto, @RequestBody List<TicketLimitDto> ticketLimitDtoList) {
+    public ResponseMessage<VoteDto> createVote(HttpServletRequest request, @RequestBody VoteCreateRequestDto voteCreateRequestDto) {
+
         String token = request.getHeader("Authorization").replace("Bearer", "");
+        System.out.println(token);
         UUID userId = jwtUtils.getIdFromToken(token);
-        return voteService.createVote(voteOptionDtoList, voteDto, userId, ticketLimitDtoList);
+        System.out.println(token + userId.toString());
+        return voteService.createVote(voteCreateRequestDto.getVoteOptionDtoList(), voteCreateRequestDto.getVoteDto(), userId, voteCreateRequestDto.getTicketLimitDtoList());
     }
 
     @DeleteMapping("api/delete/{voteId}")

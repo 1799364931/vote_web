@@ -11,9 +11,9 @@ public class VoteDto {
 
     private String title;
     private String description;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT+8")
     private Timestamp startTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT+8")
     private Timestamp endTime;
     private Boolean isTimeout;
 
@@ -78,4 +78,14 @@ public class VoteDto {
         this.endTime = endTime;
     }
 
+    @Override
+    public String toString() {
+        return "VoteDto{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", isTimeout=" + isTimeout +
+                '}';
+    }
 }

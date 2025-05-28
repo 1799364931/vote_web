@@ -1,26 +1,40 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en" xmlns="">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>投票首页</title>
-    <link rel="stylesheet" href="/css/homeStyles.css">
+    <title>投票页面</title>
+    <link rel="stylesheet" href="/css/home.css"/>
 </head>
 <body>
-<nav class="menu">
-    <label for="searchBox"><input type="text" id="searchBox" placeholder="搜索投票"></label>
-    <button onclick="searchVote()">搜索</button>
-
-    <button onclick="createVote()">创建投票</button>
-
+<!--顶部导航栏-->
+<nav class="navbar">
+    <div class="navbar-container"></div>
+    <ul class="nav-links">
+        <li class="entry-wrapper">
+            <a href="http://localhost:8888/home">首页</a>
+        </li>
+        <li class="entry-wrapper">
+            <a href="http://localhost:8888/create">创建投票</a>
+        </li>
+        <li class="entry-wrapper">
+            <a href="#">我的投票</a>
+        </li>
+        <li class="entry-wrapper">
+            <a href="#">个人中心</a>
+        </li>
+    </ul>
+    <div class="search-container">
+        <input type="text" placeholder="搜索投票..."/>
+        <button>
+            搜索
+        </button>
+    </div>
     <div class="user-profile">
-        <img src="avatar.jpg" alt="用户头像">
+        <a href="">
+            <img src="learn/test.JPG" alt="用户头像" width="40" height="40"/>
+        </a>
     </div>
 </nav>
 
-<h1>投票列表</h1>
-<div id="voteContainer" class="vote-grid"></div>
-
-<script src="/js/homeScript.js"></script>
 </body>
 </html>

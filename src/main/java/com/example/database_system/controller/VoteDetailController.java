@@ -3,8 +3,6 @@ package com.example.database_system.controller;
 import com.example.database_system.pojo.JwtUtils;
 import com.example.database_system.pojo.dto.VoteDetailDto;
 import com.example.database_system.pojo.response.ResponseMessage;
-import com.example.database_system.pojo.vote.Vote;
-import com.example.database_system.pojo.vote.VoteOption;
 import com.example.database_system.service.Vote.VoteService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;

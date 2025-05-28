@@ -22,7 +22,7 @@ public class JwtUtils {
                 .setHeaderParam("alg", "HS256")
                 //payload
                 .claim("account", user.getAccount())
-                .claim("uuid", user.getId())
+                .claim("id", user.getId().toString())
                 .claim("role", user.getRole())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24L))
                 .setId(UUID.randomUUID().toString())
@@ -58,10 +58,10 @@ public class JwtUtils {
     }
 
     public UUID getIdFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret)
+        return UUID.fromString(Jwts.parser().setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody()
-                .get("id", UUID.class);
+                .get("id", String.class));
     }
 
 

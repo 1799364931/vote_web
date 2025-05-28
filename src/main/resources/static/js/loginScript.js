@@ -34,10 +34,10 @@ document.getElementById("submitBtn").addEventListener("click", function(event) {
         })
             .then(response => response.json())
             .then(data => {
-                data.token = undefined;
                 if(data.code === 200) {
                     alert("登录成功：");
-                    localStorage.setItem("token", data.token); // 存储 Token
+                    alert(data.data.token);
+                    localStorage.setItem("token", data.data.token); // 存储 Token
                     window.location.href = "/home";
                 }
                 else{

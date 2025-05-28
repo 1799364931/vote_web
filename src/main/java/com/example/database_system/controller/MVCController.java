@@ -14,7 +14,7 @@ public class MVCController {
 
     @GetMapping("/home")
     public String ShowHomePage() {
-        return "newhome";
+        return "home";
     }
 
     @GetMapping("/create")

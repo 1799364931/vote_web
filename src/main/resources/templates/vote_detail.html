@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/templates/vote_detail.css"/>
+    <title>Title</title>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-container"></div>
+    <ul class="nav-links">
+        <li class="entry-wrapper">
+            <a href="http://localhost:8888/home">首页</a>
+        </li>
+        <li class="entry-wrapper">
+            <a href="http://localhost:8888/create">创建投票</a>
+        </li>
+        <li class="entry-wrapper">
+            <a href="#">我的投票</a>
+        </li>
+        <li class="entry-wrapper">
+            <a href="#">个人中心</a>
+        </li>
+    </ul>
+    <div class="search-container">
+        <input type="text" placeholder="搜索投票..."/>
+        <button>
+            搜索
+        </button>
+    </div>
+    <div class="user-profile">
+        <a href="">
+            <img src="learn/test.JPG" alt="用户头像" width="40" height="40"/>
+        </a>
+    </div>
+</nav>
+
+<div class="vote-intro-container" id="vote-intro-container">
+    <h2 class="vote-title" id="vote-title">投票标题</h2>
+    <hr>
+    <p class="vote-description" id="vote-description">投票描述
+    <p>
+</div>
+
+<div class="vote-limit-container" id="vote-limit-container">
+    <ul class="vote-limit-list" id="vote-limit-list">
+        <li class="vote-limit-item" id="vote-limit-item">
+            <!-- 显示每一类还剩多少张票可以投 -->
+            <p>
+        </li>
+    </ul>
+</div>
+
+<div class="vote-option-container" id="vote-option-container">
+    <ul class="vote-option-list" id="vote-option-list">
+        <li class="vote-option-item" id="vote-option-item">
+            <p>简单的描述</p>
+            <button id="openModal">投票！</button>
+        </li>
+    </ul>
+</div>
+
+
+<!-- 投票小窗 -->
+<div id="voteModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>投票权重详情</h2>
+        <div>
+            <label>选项A：</label>
+            <input type="range" min="0" max="100" value="40" id="optionA">
+            <span id="optionAValue">40</span>
+        </div>
+        <div>
+            <label>选项B：</label>
+            <input type="range" min="0" max="100" value="60" id="optionB">
+            <span id="optionBValue">60</span>
+        </div>
+        <button class="vote-window-submit-button" id="vote-window-submit-button">
+            提交
+        </button>
+    </div>
+</div>
+
+<script src="vote_detail.js"></script>
+</body>
+</html>

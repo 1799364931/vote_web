@@ -44,4 +44,12 @@ public class VoteOptionDto {
         this.description = description;
     }
 
+    @Override
+    public String toString() {
+        return "VoteOptionDto{" +
+                "description='" + description + '\'' +
+                ", position=" + position +
+                ", voteCount=" + voteCount +
+                '}';
+    }
 }

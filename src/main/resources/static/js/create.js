@@ -55,7 +55,6 @@ function getVoteLimitDtoList() {
     const voteLimitList = document.getElementById("vote-limit-list");
     const ticketLimitDtoList = [];
     const ticketInputs = voteLimitList.querySelectorAll("input[type='range']");
-
     ticketInputs.forEach(input => {
         const ticketId = input.id;
         const description = input.parentElement.querySelector("p").innerText;
@@ -66,15 +65,14 @@ function getVoteLimitDtoList() {
             voteCount: voteCount
         });
     });
-
     return ticketLimitDtoList;
 }
 
 function getVoteDto() {
     let voteTitle = document.getElementById("vote-title-input").value;
     let voteDescription = document.getElementById("vote-description-input").value;
-    let startTime = document.getElementById("vote-start-time").value;
-    let endTime = document.getElementById("vote-end-time").value;
+    let startTime = document.getElementById("vote-start-time").value + ":00";
+    let endTime = document.getElementById("vote-end-time").value + ":00";
     let isTimeout = false;
 
     if (new Date(endTime) < new Date()) {
@@ -107,7 +105,7 @@ function getOptionalList() {
     return options;
 }
 
-document.getElementById("submitBtn").addEventListener("click", function (event) {
+document.getElementById("submit-vote-btn").addEventListener("click", function (event) {
 
     /* <!--
 
@@ -154,13 +152,14 @@ document.getElementById("submitBtn").addEventListener("click", function (event) 
         return;
     }
 
-    fetch("http://localhost:8888/create/api/create", {
+    fetch("http://localhost:8888/home/api/create", {
         method: "POST",
         headers: {
-            "authorization": "Bearer ${token}"
+            "authorization": `Bearer${localStorage.getItem("token")}`,
+            "Content-Type": "application/json; charset=UTF-8",
         },
         body: JSON.stringify({
-            optionalList: optionalList,
+            voteOptionDtoList: optionalList,
             voteDto: voteDto,
             ticketLimitDtoList: ticketLimitDtoList
         })

@@ -32,10 +32,10 @@ public class LoginRegisterUserService {
         user.setRole(loginRegisterUserDto.getRole());
         if (userRepository.findByaccount(user.getAccount()).isPresent()) {
             //账户名冲突
-            return ResponseMessage.error(new LoginRegisterUserDto(user), "账户名已存在，请更换账户名", HttpStatus.BAD_REQUEST.value());
+            return ResponseMessage.error(loginRegisterUserDto, "账户名已存在，请更换账户名", HttpStatus.BAD_REQUEST.value());
         } else {
             userRepository.save(user);
-            return ResponseMessage.success(new LoginRegisterUserDto(user), "注册成功，请登录");
+            return ResponseMessage.success(loginRegisterUserDto, "注册成功，请登录");
         }
     }
 
@@ -49,12 +49,12 @@ public class LoginRegisterUserService {
             if (securityConfig.passwordEncoder().matches(loginRegisterUserDto.getPassword(), savedUser.get().getPassword())) {
                 loginRegisterUserDto.setToken(jwtUtils.generateToken(savedUser.get()));
                 TokenStorage.storeToken(savedUser.get().getAccount(), loginRegisterUserDto.getToken());
-                return ResponseMessage.success(new LoginRegisterUserDto(user), "登录成功");
+                return ResponseMessage.success(loginRegisterUserDto, "登录成功");
             } else {
-                return ResponseMessage.error(new LoginRegisterUserDto(user), "密码错误", HttpStatus.BAD_REQUEST.value());
+                return ResponseMessage.error(loginRegisterUserDto, "密码错误", HttpStatus.BAD_REQUEST.value());
             }
         } else {
-            return ResponseMessage.error(new LoginRegisterUserDto(user), "账户名不存在", HttpStatus.BAD_REQUEST.value());
+            return ResponseMessage.error(loginRegisterUserDto, "账户名不存在", HttpStatus.BAD_REQUEST.value());
         }
     }
 
