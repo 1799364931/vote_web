@@ -5,12 +5,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/login")
+@RequestMapping
 public class MVCController {
-    @GetMapping
+    @GetMapping("/login")
     public String ShowLoginPage() {
-        return "login"; // 返回你自己的 login.html
+        return "login";
     }
 
+    @GetMapping("/home")
+    public String ShowHomePage() {
+        return "newhome";
+    }
 
+    @GetMapping("/create")
+    public String ShowCreatePage() {
+        return "create";
+    }
 }

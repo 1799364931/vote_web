@@ -5,6 +5,7 @@ import com.example.database_system.pojo.ticket.TicketLimit;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Table(name = "tb_ticket")
@@ -14,6 +15,15 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "weight")
+    private Integer weight;
+
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
+    private List<TicketLimit> ticketLimit;
 
     public String getDescription() {
         return description;
@@ -31,19 +41,19 @@ public class Ticket {
         this.weight = weight;
     }
 
-    public ArrayList<TicketLimit> getTicketLimit() {
+    public List<TicketLimit> getTicketLimit() {
         return ticketLimit;
     }
 
-    public void setTicketLimit(ArrayList<TicketLimit> ticketLimit) {
+    public void setTicketLimit(List<TicketLimit> ticketLimit) {
         this.ticketLimit = ticketLimit;
     }
 
-    @Column(name = "description")
-    private String description;
-    @Column(name = "weight")
-    private Integer weight;
+    public UUID getId() {
+        return id;
+    }
 
-    @OneToMany(mappedBy = "ticket" , cascade = CascadeType.ALL)
-    private ArrayList<TicketLimit> ticketLimit;
+    public void setId(UUID id) {
+        this.id = id;
+    }
 }

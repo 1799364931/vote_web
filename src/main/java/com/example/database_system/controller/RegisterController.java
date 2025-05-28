@@ -22,15 +22,7 @@ public class RegisterController {
 
     @PostMapping
     public ResponseMessage<LoginRegisterUserDto> Register(@RequestBody LoginRegisterUserDto loginRegisterUserDto){
-        System.out.println(loginRegisterUserDto.getAccount());
-
-        var response = loginRegisterUserService.RegisterUser(loginRegisterUserDto);
-        if(response.getResponseCode() == UserServiceResponse.ResponseCode.REGISTER_FAIL){
-            return ResponseMessage.fail(loginRegisterUserDto,"create fail , account already exist.");
-        }
-        else{
-            return ResponseMessage.success(loginRegisterUserDto,"create success.");
-        }
+        return loginRegisterUserService.RegisterUser(loginRegisterUserDto);
     }
 
 }

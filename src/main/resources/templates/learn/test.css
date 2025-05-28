@@ -1,0 +1,24 @@
+body {
+    background-color: #888888;
+    background-image: url("test.JPG");
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-position: 100% top;
+    font: 18px Microsoft YaHei UI, sans-serif;
+}
+
+h1 {
+    cursor: move;
+    color: #ff0000;
+    text-align: center;
+}
+
+p {
+    font-family: "Times New Roman", Times, serif;
+    font-size: smaller;
+}
+
+a {
+    display: inline-block;
+    background-color: gray;
+}

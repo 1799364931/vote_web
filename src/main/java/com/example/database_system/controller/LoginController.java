@@ -20,30 +20,9 @@ public class LoginController {
     @Autowired
     LoginRegisterUserService loginRegisterUserService;
 
-    @Autowired
-    JwtUtils jwtUtils;
-
-
-//    @GetMapping
-//    public String ShowLoginPage() {
-//        return "login"; // 返回你自己的 login.html
-//    }
-
-    @PostMapping("/dologin")
+    @PostMapping("/api/login")
     public ResponseMessage<LoginRegisterUserDto> Login(@RequestBody LoginRegisterUserDto loginRegisterUserDto){
-        System.out.println(loginRegisterUserDto.getAccount());
-
-        var response = loginRegisterUserService.LoginUser(loginRegisterUserDto);
-        if(response.getResponseCode() == UserServiceResponse.ResponseCode.LOGIN_PASSWORD_ERROR ||
-            response.getResponseCode() == UserServiceResponse.ResponseCode.USER_NOT_EXIST ){
-            return ResponseMessage.fail(loginRegisterUserDto,"login fail ");
-        }
-        else{
-            String token = jwtUtils.generateToken(response.getUser());
-            //每次登录都 更新token
-            TokenStorage.storeToken(loginRegisterUserDto.getAccount(),token);
-            return ResponseMessage.loginSuccess(loginRegisterUserDto,"login success.", token);
-        }
+        return loginRegisterUserService.LoginUser(loginRegisterUserDto);
     }
 
 }

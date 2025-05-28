@@ -1,11 +1,16 @@
 package com.example.database_system.service.User;
 
 import com.example.database_system.config.SecurityConfig;
+import com.example.database_system.pojo.JwtUtils;
+import com.example.database_system.pojo.TokenStorage;
+import com.example.database_system.pojo.dto.UserDto;
+import com.example.database_system.pojo.response.ResponseMessage;
 import com.example.database_system.pojo.response.UserServiceResponse;
 import com.example.database_system.pojo.dto.LoginRegisterUserDto;
 import com.example.database_system.pojo.user.User;
 import com.example.database_system.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,38 +22,39 @@ public class LoginRegisterUserService {
     @Autowired
     SecurityConfig securityConfig;
 
-    public UserServiceResponse RegisterUser(LoginRegisterUserDto loginRegisterUserDto){
+    @Autowired
+    JwtUtils jwtUtils;
+
+    public ResponseMessage<LoginRegisterUserDto> RegisterUser(LoginRegisterUserDto loginRegisterUserDto) {
         var user = new User();
         user.setAccount(loginRegisterUserDto.getAccount());
         user.setPassword(securityConfig.passwordEncoder().encode(loginRegisterUserDto.getPassword()));
         user.setRole(loginRegisterUserDto.getRole());
-        if(userRepository.findByaccount(user.getAccount()).isPresent()){
+        if (userRepository.findByaccount(user.getAccount()).isPresent()) {
             //账户名冲突
-            return new UserServiceResponse("", UserServiceResponse.ResponseCode.REGISTER_FAIL,user);
-        }
-        else{
+            return ResponseMessage.error(new LoginRegisterUserDto(user), "账户名已存在，请更换账户名", HttpStatus.BAD_REQUEST.value());
+        } else {
             userRepository.save(user);
-            return new UserServiceResponse("", UserServiceResponse.ResponseCode.REGISTER_SUCCESS,user);
+            return ResponseMessage.success(new LoginRegisterUserDto(user), "注册成功，请登录");
         }
     }
 
-    public UserServiceResponse LoginUser(LoginRegisterUserDto loginRegisterUserDto){
+    public ResponseMessage<LoginRegisterUserDto> LoginUser(LoginRegisterUserDto loginRegisterUserDto) {
         var user = new User();
         user.setAccount(loginRegisterUserDto.getAccount());
         user.setPassword(securityConfig.passwordEncoder().encode(loginRegisterUserDto.getPassword()));
         user.setRole(loginRegisterUserDto.getRole());
         var savedUser = userRepository.findByaccount(user.getAccount());
-        if(savedUser.isPresent()){
-            System.out.println(user.getPassword());
-            if(securityConfig.passwordEncoder().matches(loginRegisterUserDto.getPassword(),savedUser.get().getPassword())){
-                return new UserServiceResponse("", UserServiceResponse.ResponseCode.LOGIN_PASSWORD_CORRECT,user);
+        if (savedUser.isPresent()) {
+            if (securityConfig.passwordEncoder().matches(loginRegisterUserDto.getPassword(), savedUser.get().getPassword())) {
+                loginRegisterUserDto.setToken(jwtUtils.generateToken(savedUser.get()));
+                TokenStorage.storeToken(savedUser.get().getAccount(), loginRegisterUserDto.getToken());
+                return ResponseMessage.success(new LoginRegisterUserDto(user), "登录成功");
+            } else {
+                return ResponseMessage.error(new LoginRegisterUserDto(user), "密码错误", HttpStatus.BAD_REQUEST.value());
             }
-            else{
-                return new UserServiceResponse("", UserServiceResponse.ResponseCode.LOGIN_PASSWORD_ERROR,user);
-            }
-        }
-        else{
-            return new UserServiceResponse("", UserServiceResponse.ResponseCode.USER_NOT_EXIST,user);
+        } else {
+            return ResponseMessage.error(new LoginRegisterUserDto(user), "账户名不存在", HttpStatus.BAD_REQUEST.value());
         }
     }
 

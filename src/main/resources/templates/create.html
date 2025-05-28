@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="">
+<head>
+    <meta charset="UTF-8">
+    <title>投票页面</title>
+    <link rel="stylesheet" href="/css/create.css"/>
+</head>
+<body>
+<!--顶部导航栏-->
+<nav class="navbar">
+    <div class="navbar-container"></div>
+    <ul class="nav-links">
+        <li class="entry-wrapper">
+            <a href="http://localhost:8888/home">首页</a>
+        </li>
+        <li class="entry-wrapper">
+            <a href="http://localhost:8888/create">创建投票</a>
+        </li>
+        <li class="entry-wrapper">
+            <a href="#">我的投票</a>
+        </li>
+        <li class="entry-wrapper">
+            <a href="#">个人中心</a>
+        </li>
+    </ul>
+    <div class="search-container">
+        <input type="text" placeholder="搜索投票..."/>
+        <button>
+            搜索
+        </button>
+    </div>
+    <div class="user-profile">
+        <a href="">
+            <img src="learn/test.JPG" alt="用户头像" width="40" height="40"/>
+        </a>
+    </div>
+</nav>
+
+
+<!--创建投票-->
+<div class="vote-container">
+    <div class="vote-title">
+        <h2 class="create-vote-title">创建投票</h2>
+        <input type="text" class="vote-title-input" id="vote-title-input" placeholder="请输入投票标题"/>
+    </div>
+
+    <div class="vote-description">
+        <textarea class="vote-description-input" id="vote-description-input" placeholder="请输入投票描述"></textarea>
+    </div>
+
+    <div class="vote-time-container">
+        <ul class="vote-time-list" id="vote-time-list">
+            <li class="vote-time-item">
+                <label for="vote-start-time">开始时间：</label>
+                <input type="datetime-local" id="vote-start-time"/>
+            </li>
+            <li class="vote-time-item">
+                <label for="vote-end-time">结束时间：</label>
+                <input type="datetime-local" id="vote-end-time"/>
+            </li>
+        </ul>
+    </div>
+
+    <!--最大投票数-->
+    <div class="vote-limit-container">
+        <ul class="vote-limit-list" id="vote-limit-list">
+            <li class="vote-limit-item">
+                <label for="vote-limit">选择可投票数：</label>
+                <input type="range" id="vote-limit" min="1" max="10" value="1">
+                <span id="vote-limit-value">1</span>
+            </li>
+        </ul>
+
+    </div>
+
+
+    <div class="vote-option-container" id="vote-option-container">
+        <!--做一个静态的例子-->
+        <ul class="vote-option-list" id="vote-option-list">
+            <li class="vote-option-node">
+                <input type="text" class="vote-option-input" placeholder="请输入选项内容"/>
+                <button class="remove-option-btn"> 删除</button>
+            </li>
+        </ul>
+
+    </div>
+    <div class="vote-option-btn">
+        <button class="add-vote-option-btn" id="add-vote-option-btn" onclick="test()">
+            + 点击添加投票选项
+        </button>
+    </div>
+</div>
+</div>
+<div>
+    <button class="submit-vote-btn" id="submit-vote-btn">
+        创建投票
+    </button>
+</div>
+<script src="/js/create.js"></script>
+</body>
+
+</html>

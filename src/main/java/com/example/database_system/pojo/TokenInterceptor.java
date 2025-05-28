@@ -21,7 +21,7 @@ public class TokenInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, @NonNull HttpServletResponse response,@NonNull Object handler) throws IOException {
         //放行非token请求
         String path = request.getRequestURI();
-        if (path.startsWith("/login") || path.startsWith("/register") || path.startsWith("/public")) {
+        if (path.startsWith("/login") || path.startsWith("/register") || path.startsWith("/create") || path.startsWith("/home")) {
             return true; // 直接放行
         }
 

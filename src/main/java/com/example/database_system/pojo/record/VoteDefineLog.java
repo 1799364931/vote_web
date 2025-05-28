@@ -27,6 +27,17 @@ public class VoteDefineLog {
     @JoinColumn(name = "vote_id")
     private Vote vote;
 
+    public VoteDefineLog(String operation, Timestamp time, User operator, Vote vote) {
+        this.operation = operation;
+        this.time = time;
+        this.operator = operator;
+        this.vote = vote;
+    }
+
+    public VoteDefineLog() {
+    }
+
+
     public UUID getId() {
         return id;
     }

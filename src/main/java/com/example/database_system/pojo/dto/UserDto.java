@@ -2,28 +2,18 @@ package com.example.database_system.pojo.dto;
 
 import com.example.database_system.pojo.user.User;
 
-public class LoginRegisterUserDto {
-
+public class UserDto {
     private String account;
-    private String password;
+    private String name;
     private Integer role;
-    private String token;
 
-    public LoginRegisterUserDto() {
+    public UserDto() {
     }
 
-    public LoginRegisterUserDto(User user) {
+    public UserDto(User user) {
         this.account = user.getAccount();
-        this.password = user.getPassword();
+        this.name = user.getName();
         this.role = user.getRole();
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public String getAccount() {
@@ -34,12 +24,12 @@ public class LoginRegisterUserDto {
         this.account = account;
     }
 
-    public String getPassword() {
-        return password;
+    public String getName() {
+        return name;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getRole() {
