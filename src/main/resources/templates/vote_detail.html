@@ -37,49 +37,62 @@
 </nav>
 
 <div class="vote-intro-container" id="vote-intro-container">
+    <div class = "vote-intro-text-wrapper" id = "vote-intro-text-wrapper">
     <h2 class="vote-title" id="vote-title">投票标题</h2>
     <hr>
-    <p class="vote-description" id="vote-description">投票描述
-    <p>
+    <p class="vote-description" id="vote-description">投票描述</p>
+    </div>
+    <div class="vote-limit-wrapper" id="vote-limit-wrapper">
+        <ul class="vote-limit-list" id="vote-limit-list">
+            <li class="vote-limit-item" id="vote-limit-item">
+                <!-- 显示每一类可以投多少票 -->
+                <p>
+            </li>
+        </ul>
+    </div>
+    <div class = "vote-time-wrapper" id="vote-time-wrapper">
+        <ul class="vote-time-list" id="vote-time-list">
+            <li class="vote-time-item" id="vote-start-time-item">
+                <label for="vote-start-time">开始时间：</label>
+                <span id="vote-start-time">2023-10-01 10:00</span>
+            </li>
+            <li class="vote-time-item" id="vote-end-time-item">
+                <label for="vote-end-time">结束时间：</label>
+                <span id="vote-end-time">2023-10-31 18:00</span>
+            </li>
+        </ul>
+    </div>
+    <div class = "vote-creator-wrapper">
+        <label for="vote-creator">创建者：</label>
+        <span id="vote-creator">张三</span>
+    </div>
 </div>
 
-<div class="vote-limit-container" id="vote-limit-container">
-    <ul class="vote-limit-list" id="vote-limit-list">
-        <li class="vote-limit-item" id="vote-limit-item">
-            <!-- 显示每一类还剩多少张票可以投 -->
-            <p>
-        </li>
-    </ul>
-</div>
+
 
 <div class="vote-option-container" id="vote-option-container">
     <ul class="vote-option-list" id="vote-option-list">
         <li class="vote-option-item" id="vote-option-item">
-            <p>简单的描述</p>
-            <button id="openModal">投票！</button>
+                <p class = "vote-option-description">简单的描述</p>
+                <button class ="vote-button" id="vote-button">投票！</button>
         </li>
     </ul>
 </div>
 
 
 <!-- 投票小窗 -->
-<div id="voteModal" class="modal">
+<div id="vote-modal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>投票权重详情</h2>
-        <div>
-            <label>选项A：</label>
-            <input type="range" min="0" max="100" value="40" id="optionA">
-            <span id="optionAValue">40</span>
-        </div>
-        <div>
-            <label>选项B：</label>
-            <input type="range" min="0" max="100" value="60" id="optionB">
-            <span id="optionBValue">60</span>
-        </div>
-        <button class="vote-window-submit-button" id="vote-window-submit-button">
-            提交
-        </button>
+        <ul class = "vote-limit-list-modal" id = "vote-limit-list-modal">
+            <li class = "vote-limit-item-modal" id = "vote-limit-item-modal">
+                <p class = "vote-limit-description">简单的描述</p>
+                <button class = "vote-limit-item-button-modal" id = "vote-limit-item-button-modal">
+                投票
+                </button>
+            </li>
+        </ul>
     </div>
 </div>
 

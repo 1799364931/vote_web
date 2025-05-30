@@ -1,4 +1,4 @@
-package com.example.database_system.pojo.dto;
+package com.example.database_system.pojo.dto.user;
 
 import com.example.database_system.pojo.user.User;
 

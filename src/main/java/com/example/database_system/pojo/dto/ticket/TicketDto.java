@@ -1,4 +1,4 @@
-package com.example.database_system.pojo.dto;
+package com.example.database_system.pojo.dto.ticket;
 
 import com.example.database_system.pojo.ticket.Ticket;
 

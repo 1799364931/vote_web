@@ -1,6 +1,6 @@
 async function fetchVotes() {
     try {
-        const response = await fetch("api/allvote");
+        const response = await fetch("http://localhost:8888//vote/api/all-vote", );
         const data = await response.json();
 
         const container = document.getElementById("voteContainer");
@@ -31,7 +31,7 @@ function createVote() {
 
 function searchVote() {
     const query = document.getElementById("searchBox").value;
-    fetch("http://localhost:8888/home/api/search", {
+    fetch("http://localhost:8888/vote/api/search/keyword="+ new URLSearchParams(query).toString(), {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

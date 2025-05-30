@@ -1,10 +1,7 @@
-package com.example.database_system.pojo;
+package com.example.database_system.pojo.util;
 
-import com.example.database_system.pojo.dto.LoginRegisterUserDto;
 import com.example.database_system.pojo.user.User;
 import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;

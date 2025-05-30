@@ -43,7 +43,6 @@
     position: absolute; /* 绝对定位 */
     right: 20px; /* 距离右侧20px */
     align-self: center; /* 距离顶部10px */
-
     display: flex;
     align-items: center;
 }
@@ -71,7 +70,6 @@
     border-radius: 8px; /* 让输入框边角更柔和 */
     width: 100%; /* 让输入框填充整个容器 */
 }
-
 
 .search-container button {
     position: absolute;
@@ -123,4 +121,91 @@ body {
     padding-top: 50px; /* 确保内容不被导航栏遮挡 */
     font-family: Arial, sans-serif; /* 设置全局字体 */
     background-color: #f8f8f8; /* 设置背景颜色 */
+}
+
+
+.vote-intro-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #fff; /* 白色背景 */
+    border-radius: 10px; /* 圆角 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+    margin: 20px auto; /* 自动水平居中 */
+    max-width: 800px; /* 最大宽度 */
+}
+
+.vote-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.vote-description {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.vote-intro-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #fff; /* 白色背景 */
+    border-radius: 10px; /* 圆角 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+    margin: 20px auto; /* 自动水平居中 */
+    max-width: 800px; /* 最大宽度 */
+
+}
+
+/* 投票选项列表 */
+.vote-option-list{
+    list-style: none; /* 去掉默认的列表样式 */
+    padding: 0; /* 去掉内边距 */
+    margin: 0; /* 去掉外边距 */
+    display: flex; /* 使用flex布局 */
+    flex-direction: column; /* 垂直排列 */
+    gap: 10px; /* 每个选项之间的间距 */
+    align-items: center;
+}
+
+.vote-option-item {
+    width: 70%;
+    display: flex; /* 使用flex布局 */
+    align-items: center; /* 垂直居中对齐 */
+    padding: 10px; /* 内边距 */
+    background-color: #ffffff; /* 背景颜色 */
+    border-radius: 5px; /* 圆角 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+}
+
+.vote-option-item-wrapper{
+    display: flex; /* 使用flex布局 */
+    align-items: center; /* 垂直居中对齐 */
+    width: 100%; /* 占满父容器宽度 */
+    justify-content: space-between; /* 两端对齐 */
+}
+
+.vote-option-description{
+    flex: 1; /* 占据剩余空间 */
+    margin-right: 10px; /* 右侧间距 */
+    font-size: 16px; /* 字体大小 */
+    color: #333; /* 字体颜色 */
+}
+
+.vote-button{
+    background-color: deeppink; /* 按钮背景色 */
+    color: white; /* 按钮文字颜色 */
+    border: none; /* 移除边框 */
+    border-radius: 5px; /* 圆角按钮 */
+    padding: 10px 15px; /* 内边距 */
+    cursor: pointer; /* 鼠标悬停时显示手型 */
+    font-size: 16px; /* 字体大小 */
+}
+
+.vote-button:hover {
+    background-color: hotpink; /* 鼠标悬停时改变背景色 */
 }

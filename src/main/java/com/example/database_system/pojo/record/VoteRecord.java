@@ -2,55 +2,57 @@ package com.example.database_system.pojo.record;
 
 import com.example.database_system.pojo.ticket.Ticket;
 import com.example.database_system.pojo.user.User;
-import com.example.database_system.pojo.vote.VoteOption;
+import com.example.database_system.pojo.vote.Vote;
 import jakarta.persistence.*;
 
 import java.util.UUID;
 
-@Table(name = "tb_vote_record",indexes = {
-        @Index(name = "idx_user_vote",columnList = "voter_id , vote_option_id")
-})
 @Entity
+@Table(name = "tb_vote_record")
 public class VoteRecord {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
-    private UUID id;
+    @EmbeddedId
+    private VoteRecordId voteId;
 
     @ManyToOne
-    @JoinColumn(name = "voter_id")
-    private User voter;
+    @MapsId("userId")
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "vote_option_id")
-    private VoteOption voteOption;
+    @MapsId("voteId")
+    @JoinColumn(name = "vote_id")
+    private Vote vote;
 
     @ManyToOne
+    @MapsId("ticketId")
     @JoinColumn(name = "ticket_id")
     private Ticket ticket;
 
-    public UUID getId() {
-        return id;
+    @Column(name = "vote_count")
+    private Integer voteCount;
+
+    public VoteRecordId getVoteId() {
+        return voteId;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setVoteId(VoteRecordId voteId) {
+        this.voteId = voteId;
     }
 
-    public User getVoter() {
-        return voter;
+    public User getUser() {
+        return user;
     }
 
-    public void setVoter(User voter) {
-        this.voter = voter;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public VoteOption getVoteOption() {
-        return voteOption;
+    public Vote getVote() {
+        return vote;
     }
 
-    public void setVoteOption(VoteOption voteOption) {
-        this.voteOption = voteOption;
+    public void setVote(Vote vote) {
+        this.vote = vote;
     }
 
     public Ticket getTicket() {
@@ -59,5 +61,66 @@ public class VoteRecord {
 
     public void setTicket(Ticket ticket) {
         this.ticket = ticket;
+    }
+
+    public Integer getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(Integer voteCount) {
+        this.voteCount = voteCount;
+    }
+}
+
+
+@Embeddable
+class VoteRecordId{
+    private UUID userId;
+    private UUID voteId;
+    private UUID ticketId;
+
+    public VoteRecordId() {
+    }
+    public VoteRecordId(UUID userId, UUID voteId, UUID ticketId) {
+        this.userId = userId;
+        this.voteId = voteId;
+        this.ticketId = ticketId;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
+    public UUID getVoteId() {
+        return voteId;
+    }
+    public void setVoteId(UUID voteId) {
+        this.voteId = voteId;
+    }
+    public UUID getTicketId() {
+        return ticketId;
+    }
+    public void setTicketId(UUID ticketId) {
+        this.ticketId = ticketId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof VoteRecordId that)) return false;
+
+        if (!userId.equals(that.userId)) return false;
+        if (!voteId.equals(that.voteId)) return false;
+        return ticketId.equals(that.ticketId);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = userId.hashCode();
+        result = 31 * result + voteId.hashCode();
+        result = 31 * result + ticketId.hashCode();
+        return result;
     }
 }

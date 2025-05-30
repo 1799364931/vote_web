@@ -1,14 +1,12 @@
 package com.example.database_system.service.User;
 
 import com.example.database_system.config.SecurityConfig;
-import com.example.database_system.pojo.JwtUtils;
-import com.example.database_system.pojo.TokenStorage;
-import com.example.database_system.pojo.dto.UserDto;
+import com.example.database_system.pojo.util.JwtUtils;
+import com.example.database_system.pojo.util.TokenStorage;
 import com.example.database_system.pojo.response.ResponseMessage;
-import com.example.database_system.pojo.response.UserServiceResponse;
-import com.example.database_system.pojo.dto.LoginRegisterUserDto;
+import com.example.database_system.pojo.dto.user.LoginRegisterUserDto;
 import com.example.database_system.pojo.user.User;
-import com.example.database_system.repository.UserRepository;
+import com.example.database_system.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,6 +22,9 @@ public class LoginRegisterUserService {
 
     @Autowired
     JwtUtils jwtUtils;
+
+
+
 
     public ResponseMessage<LoginRegisterUserDto> RegisterUser(LoginRegisterUserDto loginRegisterUserDto) {
         var user = new User();

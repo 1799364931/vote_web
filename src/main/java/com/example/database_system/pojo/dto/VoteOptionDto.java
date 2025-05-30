@@ -9,6 +9,8 @@ public class VoteOptionDto {
 
     private String description;
     private Integer position;
+
+    //vote count记录权重 而不是实际投票数
     private Integer voteCount;
 
     public VoteOptionDto() {

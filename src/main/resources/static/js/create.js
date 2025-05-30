@@ -152,7 +152,7 @@ document.getElementById("submit-vote-btn").addEventListener("click", function (e
         return;
     }
 
-    fetch("http://localhost:8888/home/api/create", {
+    fetch("http://localhost:8888/vote/api/create", {
         method: "POST",
         headers: {
             "authorization": `Bearer${localStorage.getItem("token")}`,

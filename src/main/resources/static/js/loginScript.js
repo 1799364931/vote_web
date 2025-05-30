@@ -47,7 +47,7 @@ document.getElementById("submitBtn").addEventListener("click", function(event) {
             .catch(error => console.error("提交失败:", error));
     }
     else{
-        fetch("http://localhost:8888/register", {
+        fetch("http://localhost:8888/register/api/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

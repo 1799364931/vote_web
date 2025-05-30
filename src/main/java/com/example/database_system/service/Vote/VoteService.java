@@ -1,13 +1,25 @@
 package com.example.database_system.service.Vote;
 
 import com.example.database_system.pojo.dto.*;
+import com.example.database_system.pojo.dto.ticket.TicketLimitDto;
+import com.example.database_system.pojo.dto.user.UserDto;
+import com.example.database_system.pojo.dto.vote.VoteDetailDto;
+import com.example.database_system.pojo.dto.vote.VoteDto;
 import com.example.database_system.pojo.record.VoteDefineLog;
+import com.example.database_system.pojo.record.VoteOptionRecord;
 import com.example.database_system.pojo.record.VoteRecord;
 import com.example.database_system.pojo.response.ResponseMessage;
 import com.example.database_system.pojo.ticket.TicketLimit;
 import com.example.database_system.pojo.vote.Vote;
 import com.example.database_system.pojo.vote.VoteOption;
-import com.example.database_system.repository.*;
+import com.example.database_system.repository.ticket.TicketLimitRepository;
+import com.example.database_system.repository.ticket.TicketRepository;
+import com.example.database_system.repository.user.UserRepository;
+import com.example.database_system.repository.vote.VoteOptionRepository;
+import com.example.database_system.repository.vote.VoteRepository;
+import com.example.database_system.repository.record.VoteDefineLogRepository;
+import com.example.database_system.repository.record.VoteOptionRecordRepository;
+import com.example.database_system.repository.record.VoteRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -36,11 +48,12 @@ public class VoteService {
     TicketLimitRepository ticketLimitRepository;
 
     @Autowired
-    VoteRecordRepository voteRecordRepository;
+    VoteOptionRecordRepository voteOptionRecordRepository;
 
+    @Autowired
+    VoteRecordRepository voteRecordRepository;
     //创建Vote投票 (要携带vote optional信息)
 
-    //todo 这里不算很完整 ticketLimit需要设置
     public ResponseMessage<VoteDto> createVote(List<VoteOptionDto> voteOptionDtoList, VoteDto voteDto, UUID userId, List<TicketLimitDto> ticketLimitDtoList) {
         if (voteOptionDtoList.isEmpty()) {
             return ResponseMessage.error(null, "Empty vote options", HttpStatus.BAD_REQUEST.value());
@@ -72,7 +85,7 @@ public class VoteService {
             TicketLimit ticketLimit = new TicketLimit();
             var ticket = ticketRepository.findById(ticketLimitDto.getTicketId());
             if (ticket.isEmpty()) {
-                return ResponseMessage.error(null, "Ticket not exist", HttpStatus.BAD_REQUEST.value());
+                return ResponseMessage.error(null, "ticket not exist", HttpStatus.BAD_REQUEST.value());
             }
             ticketLimit.setTicket(ticket.get());
             ticketLimit.setCount(ticketLimitDto.getCount());
@@ -82,7 +95,7 @@ public class VoteService {
 
         //新增一条log
         VoteDefineLog voteDefineLog = new VoteDefineLog("CREATE", new Timestamp(System.currentTimeMillis()), creator.get(), newVote);
-        return ResponseMessage.success(voteDto, "Create Vote success");
+        return ResponseMessage.success(voteDto, "Create vote success");
     }
 
     //获取所有的vote投票
@@ -101,19 +114,19 @@ public class VoteService {
         //查看表是否存在
         var vote = voteRepository.findById(voteId);
         if (vote.isEmpty()) {
-            return ResponseMessage.error(null, "Vote not exist", HttpStatus.BAD_REQUEST.value());
+            return ResponseMessage.error(null, "vote not exist", HttpStatus.BAD_REQUEST.value());
         }
 
         VoteDto voteDto = new VoteDto(vote.get());
         var user = userRepository.findById(userId);
         if (user.isEmpty()) {
-            return ResponseMessage.error(voteDto, "User not exist", HttpStatus.BAD_REQUEST.value());
+            return ResponseMessage.error(voteDto, "user not exist", HttpStatus.BAD_REQUEST.value());
         }
 
         //判断是否是创建者或者管理者 否则无权删除
         if (user.get().getRole() == 0 && user.get().getId() != vote.get().getCreatorId().getId()) {
             //无法删除
-            return ResponseMessage.error(voteDto, "User can not delete this vote", HttpStatus.UNAUTHORIZED.value());
+            return ResponseMessage.error(voteDto, "user can not delete this vote", HttpStatus.UNAUTHORIZED.value());
         }
 
         //删除
@@ -136,7 +149,7 @@ public class VoteService {
         List<VoteOptionDto> voteOptionDtoList = new ArrayList<>();
         List<TicketLimitDto> ticketLimitDtoList = new ArrayList<>();
         if (vote.isEmpty()) {
-            return ResponseMessage.error(null, "Vote not exist", HttpStatus.BAD_REQUEST.value());
+            return ResponseMessage.error(null, "vote not exist", HttpStatus.BAD_REQUEST.value());
         }
 
         for (int i = 0; i < vote.get().getVoteOptions().size(); i++) {
@@ -154,7 +167,7 @@ public class VoteService {
         return ResponseMessage.success(voteDetailDto, "success");
     }
 
-    //为某个选项进行投票
+    //为某个投票选项投票
     public ResponseMessage<String> voteFor(UUID voteId, UUID voteOptionId, UUID userId, UUID ticketId) {
         //查看投票的东西是否存在
         var user = userRepository.findById(userId);
@@ -166,39 +179,51 @@ public class VoteService {
         }
         //查看当前用户是否允许投票
         //统计当前用户在当前投票中投的所有票 (如果该用户的投票达到了投票上限就不再允许投票
-        Integer statisticUserVoteRecordCountGroupByTicketRes = voteRecordRepository.statisticUserVoteRecordCountGroupByTicket(userId, voteOptionId, voteId);
+        var statisticUserVoteRecordCountGroupByTicketRes = voteRecordRepository.findByUserAndVoteAndTicket(
+                user.get(),
+                vote.get(),
+                ticket.get());
+        if(statisticUserVoteRecordCountGroupByTicketRes == null){
+            statisticUserVoteRecordCountGroupByTicketRes = new VoteRecord();
+            statisticUserVoteRecordCountGroupByTicketRes.setUser(user.get());
+            statisticUserVoteRecordCountGroupByTicketRes.setVote(vote.get());
+            statisticUserVoteRecordCountGroupByTicketRes.setTicket(ticket.get());
+            statisticUserVoteRecordCountGroupByTicketRes.setVoteCount(0);
+        }
+
         Integer limitCount = ticketLimitRepository.findDistinctByVoteAndTicket(vote.get(), ticket.get());
-        if (statisticUserVoteRecordCountGroupByTicketRes >= limitCount) {
+        if (statisticUserVoteRecordCountGroupByTicketRes.getVoteCount() >= limitCount) {
             return ResponseMessage.error(null, "Reach this ticket limit count", HttpStatus.BAD_REQUEST.value());
         }
         //投票
-        VoteRecord voteRecord = new VoteRecord();
-        voteRecord.setVoteOption(voteOption.get());
-        voteRecord.setTicket(ticket.get());
-        voteRecord.setVoter(user.get());
+        VoteOptionRecord voteOptionRecord = new VoteOptionRecord();
+        voteOptionRecord.setVoteOption(voteOption.get());
+        voteOptionRecord.setTicket(ticket.get());
+        voteOptionRecord.setVoter(user.get());
         //记录投票
-        voteRecordRepository.save(voteRecord);
+        voteOptionRecordRepository.save(voteOptionRecord);
+        voteRecordRepository.save(statisticUserVoteRecordCountGroupByTicketRes);
         return ResponseMessage.success("success", "success");
     }
 
     //撤销某个投票
     public ResponseMessage<String> revokeVote(UUID voteRecordId, UUID userId) {
         //查看投票记录是否存在
-        var voteRecord = voteRecordRepository.findById(voteRecordId);
+        var voteRecord = voteOptionRecordRepository.findById(voteRecordId);
         if (voteRecord.isEmpty()) {
-            return ResponseMessage.error(null, "Vote record not exist", HttpStatus.BAD_REQUEST.value());
+            return ResponseMessage.error(null, "vote record not exist", HttpStatus.BAD_REQUEST.value());
         }
         //查看用户是否存在
         var user = userRepository.findById(userId);
         if (user.isEmpty()) {
-            return ResponseMessage.error(null, "User not exist", HttpStatus.BAD_REQUEST.value());
+            return ResponseMessage.error(null, "user not exist", HttpStatus.BAD_REQUEST.value());
         }
         //判断用户是否是投票的创建者
         if (user.get().getId() != voteRecord.get().getVoter().getId()) {
-            return ResponseMessage.error(null, "User can not revoke this vote", HttpStatus.UNAUTHORIZED.value());
+            return ResponseMessage.error(null, "user can not revoke this vote", HttpStatus.UNAUTHORIZED.value());
         }
         //删除投票记录
-        voteRecordRepository.delete(voteRecord.get());
+        voteOptionRecordRepository.delete(voteRecord.get());
         return ResponseMessage.success("success", "Revoke success");
     }
 
@@ -214,5 +239,7 @@ public class VoteService {
         }
         return ResponseMessage.success(voteDtoList, "Search success");
     }
+
+    //获取剩余可投票数
 }
 

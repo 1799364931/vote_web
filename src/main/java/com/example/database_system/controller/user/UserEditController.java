@@ -1,10 +1,8 @@
-package com.example.database_system.controller;
+package com.example.database_system.controller.user;
 
-import com.example.database_system.pojo.TokenStorage;
 import com.example.database_system.pojo.response.UserServiceResponse;
-import com.example.database_system.repository.UserRepository;
+import com.example.database_system.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -16,7 +14,8 @@ public class UserEditController {
     @Autowired
     UserRepository userRepository;
 
-    @PostMapping("{userId}")
+    //todo 修改一下逻辑 将验证放在service层
+    @PostMapping("api/edit/{userId}")
     public UserServiceResponse EditUser(@PathVariable UUID userId, @RequestHeader("Authorization") String authorizationHeader){
         var user = userRepository.findById(userId);
         String token = authorizationHeader.replace("Bearer ", "");
@@ -24,9 +23,9 @@ public class UserEditController {
             // 这里可以添加编辑用户的逻辑
             // 例如修改用户信息等
 
-            return new UserServiceResponse("User edited successfully", UserServiceResponse.ResponseCode.EDIT_SUCCESS, user.get());
+            return new UserServiceResponse("user edited successfully", UserServiceResponse.ResponseCode.EDIT_SUCCESS, user.get());
         } else {
-            return new UserServiceResponse("User not found", UserServiceResponse.ResponseCode.USER_NOT_EXIST, null);
+            return new UserServiceResponse("user not found", UserServiceResponse.ResponseCode.USER_NOT_EXIST, null);
         }
     }
 }

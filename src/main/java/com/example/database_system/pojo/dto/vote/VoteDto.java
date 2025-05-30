@@ -1,4 +1,4 @@
-package com.example.database_system.pojo.dto;
+package com.example.database_system.pojo.dto.vote;
 
 import com.example.database_system.pojo.vote.Vote;
 import com.fasterxml.jackson.annotation.JsonFormat;

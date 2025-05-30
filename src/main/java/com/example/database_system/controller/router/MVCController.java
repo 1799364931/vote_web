@@ -1,4 +1,4 @@
-package com.example.database_system.controller;
+package com.example.database_system.controller.router;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,4 +21,5 @@ public class MVCController {
     public String ShowCreatePage() {
         return "create";
     }
+
 }

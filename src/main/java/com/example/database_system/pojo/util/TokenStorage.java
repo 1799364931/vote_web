@@ -1,4 +1,4 @@
-package com.example.database_system.pojo;
+package com.example.database_system.pojo.util;
 
 import org.springframework.stereotype.Component;
 

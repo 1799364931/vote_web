@@ -1,6 +1,8 @@
-package com.example.database_system.pojo.dto;
+package com.example.database_system.pojo.dto.vote;
 
-import org.springframework.web.bind.annotation.RequestBody;
+import com.example.database_system.pojo.dto.VoteOptionDto;
+import com.example.database_system.pojo.dto.ticket.TicketLimitDto;
+import com.example.database_system.pojo.dto.vote.VoteDto;
 
 import java.util.List;
 

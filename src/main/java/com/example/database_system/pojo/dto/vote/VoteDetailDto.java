@@ -1,4 +1,8 @@
-package com.example.database_system.pojo.dto;
+package com.example.database_system.pojo.dto.vote;
+
+import com.example.database_system.pojo.dto.VoteOptionDto;
+import com.example.database_system.pojo.dto.ticket.TicketLimitDto;
+import com.example.database_system.pojo.dto.user.UserDto;
 
 import java.util.List;
 

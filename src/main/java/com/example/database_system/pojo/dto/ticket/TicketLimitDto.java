@@ -1,4 +1,4 @@
-package com.example.database_system.pojo.dto;
+package com.example.database_system.pojo.dto.ticket;
 
 import com.example.database_system.pojo.ticket.TicketLimit;
 
@@ -10,6 +10,7 @@ public class TicketLimitDto {
     private Integer count;
 
     public TicketLimitDto() {
+
     }
 
     public TicketLimitDto(TicketLimit ticketLimit) {
