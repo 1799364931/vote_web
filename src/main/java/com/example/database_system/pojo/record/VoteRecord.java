@@ -5,6 +5,7 @@ import com.example.database_system.pojo.user.User;
 import com.example.database_system.pojo.vote.Vote;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
@@ -70,17 +71,25 @@ public class VoteRecord {
     public void setVoteCount(Integer voteCount) {
         this.voteCount = voteCount;
     }
+
+    public void addVoteCount(Integer count) {
+        if (this.voteCount == null) {
+            this.voteCount = 0;
+        }
+        this.voteCount += count;
+    }
 }
 
 
 @Embeddable
-class VoteRecordId{
+class VoteRecordId implements Serializable {
     private UUID userId;
     private UUID voteId;
     private UUID ticketId;
 
     public VoteRecordId() {
     }
+
     public VoteRecordId(UUID userId, UUID voteId, UUID ticketId) {
         this.userId = userId;
         this.voteId = voteId;

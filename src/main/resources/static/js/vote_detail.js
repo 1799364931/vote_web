@@ -1,4 +1,12 @@
+// document.getElementById("vote-button").addEventListener("click", function () {
+//     document.getElementById("vote-modal").style.display = "block";
+// });
+
+
+let voteOptionId = undefined;//全局变量 当用户点击投票按钮时，获取当前选项的值
 document.getElementById("vote-button").addEventListener("click", function () {
+    voteOptionId = document.querySelector(".vote-option-item .vote-button").id; // 获取当前选项的ID
+    //让小窗显示
     document.getElementById("vote-modal").style.display = "block";
 });
 
@@ -19,10 +27,6 @@ document.getElementById("optionA").addEventListener("input", function () {
 document.getElementById("optionB").addEventListener("input", function () {
     document.getElementById("optionBValue").innerText = this.value;
 });
-
-
-
-
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -75,6 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         ticketItem.className = "vote-limit-item";
                         ticketItem.innerHTML = `
                             <p>${ticket.description}</p>
+                            <p>剩余票数：<span id="${ticket.ticketId}remaining">${ticket.count}</span></p>
                             <button class = "vote-button">投票</button>
                         `;
                         document.getElementById("vote-limit-list").appendChild(ticketItem);
@@ -83,21 +88,19 @@ document.addEventListener("DOMContentLoaded", function () {
                             const voteLimitDtoList = getVoteLimitDtoList();
                             const voteDto = getVoteDto();
                             if (!voteDto) return; // 如果获取投票信息失败，则返回
-
-                            fetch(`http://localhost:8888/ticket/api/get-vote-tickets/${voteId}`, {
+                            fetch(`http://localhost:8888/api/vote/vote=${voteId}/vote-option=${voteOptionId}/ticket=${ticket.ticketId}`, {
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json",
                                     "Authorization": 'Bearer ' + localStorage.getItem('token')
-                                },
-                                body: JSON.stringify({
-                                    voteDto: voteDto,
-                                    ticketLimitDtoList: voteLimitDtoList
-                                })
+                                }
                             }).then(response => response.json())
                                 .then(data => {
                                     if (data.code === 200) {
                                         alert("投票成功！");
+                                        //更新剩余票数
+                                        const remainingSpan = document.getElementById(`${ticket.ticketId}remaining`);
+                                        remainingSpan.innerText = (parseInt(remainingSpan.innerText, 10) - 1).toString();
                                         window.location.reload(); // 刷新页面以显示最新的投票结果
                                     } else {
                                         alert(data.message);

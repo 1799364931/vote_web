@@ -29,32 +29,36 @@ import java.util.*;
 
 @Service
 public class VoteService {
-    @Autowired
-    VoteRepository voteRepository;
+    private final VoteRepository voteRepository;
+    private final VoteOptionRepository voteOptionRepository;
+    private final UserRepository userRepository;
+    private final VoteDefineLogRepository voteDefineLogRepository;
+    private final TicketRepository ticketRepository;
+    private final TicketLimitRepository ticketLimitRepository;
+    private final VoteOptionRecordRepository voteOptionRecordRepository;
+    private final VoteRecordRepository voteRecordRepository;
 
     @Autowired
-    VoteOptionRepository voteOptionRepository;
+    public VoteService(VoteRepository voteRepository,
+                       VoteOptionRepository voteOptionRepository,
+                       UserRepository userRepository,
+                       VoteDefineLogRepository voteDefineLogRepository,
+                       TicketRepository ticketRepository,
+                       TicketLimitRepository ticketLimitRepository,
+                       VoteOptionRecordRepository voteOptionRecordRepository,
+                       VoteRecordRepository voteRecordRepository) {
+        this.voteRepository = voteRepository;
+        this.voteOptionRepository = voteOptionRepository;
+        this.userRepository = userRepository;
+        this.voteDefineLogRepository = voteDefineLogRepository;
+        this.ticketRepository = ticketRepository;
+        this.ticketLimitRepository = ticketLimitRepository;
+        this.voteOptionRecordRepository = voteOptionRecordRepository;
+        this.voteRecordRepository = voteRecordRepository;
+    }
 
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    VoteDefineLogRepository voteDefineLogRepository;
-
-    @Autowired
-    TicketRepository ticketRepository;
-
-    @Autowired
-    TicketLimitRepository ticketLimitRepository;
-
-    @Autowired
-    VoteOptionRecordRepository voteOptionRecordRepository;
-
-    @Autowired
-    VoteRecordRepository voteRecordRepository;
-    //创建Vote投票 (要携带vote optional信息)
-
-    public ResponseMessage<VoteDto> createVote(List<VoteOptionDto> voteOptionDtoList, VoteDto voteDto, UUID userId, List<TicketLimitDto> ticketLimitDtoList) {
+    //创建投票
+    public ResponseMessage<UUID> createVote(List<VoteOptionDto> voteOptionDtoList, VoteDto voteDto, UUID userId, List<TicketLimitDto> ticketLimitDtoList) {
         if (voteOptionDtoList.isEmpty()) {
             return ResponseMessage.error(null, "Empty vote options", HttpStatus.BAD_REQUEST.value());
         }
@@ -95,7 +99,7 @@ public class VoteService {
 
         //新增一条log
         VoteDefineLog voteDefineLog = new VoteDefineLog("CREATE", new Timestamp(System.currentTimeMillis()), creator.get(), newVote);
-        return ResponseMessage.success(voteDto, "Create vote success");
+        return ResponseMessage.success(newVote.getId(), "Create vote success");
     }
 
     //获取所有的vote投票
@@ -168,7 +172,7 @@ public class VoteService {
     }
 
     //为某个投票选项投票
-    public ResponseMessage<String> voteFor(UUID voteId, UUID voteOptionId, UUID userId, UUID ticketId) {
+    public ResponseMessage<Integer> voteFor(UUID voteId, UUID voteOptionId, UUID userId, UUID ticketId) {
         //查看投票的东西是否存在
         var user = userRepository.findById(userId);
         var vote = voteRepository.findById(voteId);
@@ -201,9 +205,10 @@ public class VoteService {
         voteOptionRecord.setTicket(ticket.get());
         voteOptionRecord.setVoter(user.get());
         //记录投票
+        statisticUserVoteRecordCountGroupByTicketRes.addVoteCount(1);
         voteOptionRecordRepository.save(voteOptionRecord);
         voteRecordRepository.save(statisticUserVoteRecordCountGroupByTicketRes);
-        return ResponseMessage.success("success", "success");
+        return ResponseMessage.success(limitCount - statisticUserVoteRecordCountGroupByTicketRes.getVoteCount(), "success");
     }
 
     //撤销某个投票

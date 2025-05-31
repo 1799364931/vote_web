@@ -168,7 +168,8 @@ document.getElementById("submit-vote-btn").addEventListener("click", function (e
         .then(data => {
             if (data.code === 200) {
                 alert("投票创建成功！");
-                window.location.href = "/vote/${data.data.voteId}";
+                alert(data.data);
+                window.location.href = "/vote/" + data.data; // 跳转到新创建的投票详情页
             } else {
                 alert("创建投票失败: " + data.message);
             }

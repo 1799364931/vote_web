@@ -34,9 +34,9 @@ public class VoteDetailController {
     }
 
     //提交投票 这里要鉴权
-    @PostMapping("api/vote/vote={voteId}")
+    @PostMapping("api/vote/vote={voteId}/vote-option={voteOptionId}/ticket={ticketId}")
     @Tag(name = "提交投票", description = "用于提交对指定投票的投票选项，需鉴权")
-    public ResponseMessage<String> voteFor(@PathVariable UUID voteId, @RequestBody UUID ticketId, @RequestBody UUID voteOptionId, HttpServletRequest request) {
+    public ResponseMessage<Integer> voteFor(@PathVariable UUID voteId, @PathVariable UUID ticketId, @PathVariable UUID voteOptionId, HttpServletRequest request) {
         //这里需要先鉴权
         String token = request.getHeader("Authorization").replace("Bearer", "");
         UUID userId = jwtUtils.getIdFromToken(token);

@@ -22,4 +22,9 @@ public class MVCController {
         return "create";
     }
 
+    @GetMapping("/vote/{voteId}")
+    public String ShowVotePage() {
+        return "vote_detail";
+    }
+
 }

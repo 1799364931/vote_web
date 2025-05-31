@@ -37,7 +37,7 @@ public class VoteController {
 
     @PostMapping("api/create")
     @Tag(name = "创建投票", description = "用于创建新的投票信息，需鉴权")
-    public ResponseMessage<VoteDto> createVote(HttpServletRequest request, @RequestBody VoteCreateRequestDto voteCreateRequestDto) {
+    public ResponseMessage<UUID> createVote(HttpServletRequest request, @RequestBody VoteCreateRequestDto voteCreateRequestDto) {
 
         String token = request.getHeader("Authorization").replace("Bearer", "");
         System.out.println(token);
