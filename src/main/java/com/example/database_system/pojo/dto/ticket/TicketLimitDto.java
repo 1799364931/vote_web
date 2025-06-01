@@ -7,7 +7,7 @@ import java.util.UUID;
 public class TicketLimitDto {
     private UUID ticketId;
     private String description;
-    private Integer count;
+    private Integer voteCount;
 
     public TicketLimitDto() {
 
@@ -16,7 +16,7 @@ public class TicketLimitDto {
     public TicketLimitDto(TicketLimit ticketLimit) {
         this.ticketId = ticketLimit.getTicket().getId();
         this.description = ticketLimit.getTicket().getDescription();
-        this.count = ticketLimit.getCount();
+        this.voteCount = ticketLimit.getCount();
     }
 
     public String getDescription() {
@@ -35,11 +35,11 @@ public class TicketLimitDto {
         this.ticketId = ticketId;
     }
 
-    public Integer getCount() {
-        return count;
+    public Integer getVoteCount() {
+        return voteCount;
     }
 
-    public void setCount(Integer count) {
-        this.count = count;
+    public void setVoteCount(Integer voteCount) {
+        this.voteCount = voteCount;
     }
 }

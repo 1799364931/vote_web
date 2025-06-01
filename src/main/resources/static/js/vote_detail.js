@@ -20,14 +20,6 @@ window.onclick = function (event) {
     }
 };
 
-document.getElementById("optionA").addEventListener("input", function () {
-    document.getElementById("optionAValue").innerText = this.value;
-});
-
-document.getElementById("optionB").addEventListener("input", function () {
-    document.getElementById("optionBValue").innerText = this.value;
-});
-
 
 document.addEventListener("DOMContentLoaded", function () {
     /*
@@ -38,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     const path = window.location.pathname;
     const voteId = path.split('/').pop();
-    fetch(`http://localhost:8888/vote/api/get-vote-detail/${voteId}`, {
+    fetch(`http://localhost:8888/vote-detail/api/vote=${voteId}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -50,11 +42,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 const vote = data.data.voteDto;
                 const voteOptionList = data.data.voteOptionDtoList;
                 const voteLimitList = data.data.ticketLimitDtoList;
-                document.getElementById("vote-title").innerText = vote.voteDto.title;
-                document.getElementById("vote-description").innerText = vote.voteDto.description;
-                document.getElementById("vote-start-time").innerText = new Date(vote.voteDto.startTime).toLocaleString();
-                document.getElementById("vote-end-time").innerText = new Date(vote.voteDto.endTime).toLocaleString();
-                document.getElementById("vote-creator").innerText = data.data.creator.username;
+                document.getElementById("vote-title").innerText = vote.title;
+                document.getElementById("vote-description").innerText = vote.description;
+                document.getElementById("vote-start-time").innerText = new Date(vote.startTime).toLocaleString();
+                document.getElementById("vote-end-time").innerText = new Date(vote.endTime).toLocaleString();
+                document.getElementById("vote-creator").innerText = data.data.creator.account;
 
                 const optionsList = document.getElementById("vote-option-list");
 
@@ -64,25 +56,31 @@ document.addEventListener("DOMContentLoaded", function () {
                 voteOptionList.forEach(option => {
                     const optionItem = document.createElement("li");
                     optionItem.className = "vote-option-item";
+                    optionItem.id = `vote-option-item-${option.id}`; // 设置选项ID
                     optionItem.innerHTML = `
                         <p class = "vote-option-description">${option.description}</p>
-                        <p class = "vote-count">${option.voteCount}</p>>
-                        <button class ="vote-button" id="vote-button">投票</button>
+                        <p class = "vote-count">${option.voteCount}</p>
+                        <button class ="vote-button" id="vote-button">投票！</button>
                     `;
                     optionsList.appendChild(optionItem);
+                    const voteButton = optionItem.querySelector(".vote-button");
+                    voteButton.addEventListener("click", function () {
+                        voteOptionId = option.id; // 获取当前选项的ID
+                        document.getElementById("vote-modal").style.display = "block";
+                    });
                 });
 
                 //生成投票小窗口
                 voteLimitList.forEach(
                     ticket => {
                         const ticketItem = document.createElement("li");
-                        ticketItem.className = "vote-limit-item";
+                        ticketItem.className = "vote-limit-item-modal";
                         ticketItem.innerHTML = `
                             <p>${ticket.description}</p>
-                            <p>剩余票数：<span id="${ticket.ticketId}remaining">${ticket.count}</span></p>
+                            <p>剩余票数：<span id="${ticket.ticketId}remaining">${ticket.voteCount}</span></p>
                             <button class = "vote-button">投票</button>
                         `;
-                        document.getElementById("vote-limit-list").appendChild(ticketItem);
+                        document.getElementById("vote-limit-list-modal").appendChild(ticketItem);
                         const voteButton = ticketItem.querySelector(".vote-button");
                         voteButton.addEventListener("click", () => {
                             const voteLimitDtoList = getVoteLimitDtoList();

@@ -92,8 +92,9 @@ public class VoteService {
                 return ResponseMessage.error(null, "ticket not exist", HttpStatus.BAD_REQUEST.value());
             }
             ticketLimit.setTicket(ticket.get());
-            ticketLimit.setCount(ticketLimitDto.getCount());
+            ticketLimit.setCount(ticketLimitDto.getVoteCount());
             ticketLimit.setVote(newVote);
+
             ticketLimitRepository.save(ticketLimit);
         }
 

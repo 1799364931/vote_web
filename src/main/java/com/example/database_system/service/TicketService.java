@@ -68,7 +68,7 @@ public class TicketService {
                         ticket);
                 Integer userVoteCount = statisticUserVoteRecordCountGroupByTicketRes != null ? statisticUserVoteRecordCountGroupByTicketRes.getVoteCount(): 0;
                 TicketLimitDto ticketLimitDto = new TicketLimitDto(ticketLimit);
-                ticketLimitDto.setCount(ticketLimit.getCount() - userVoteCount);
+                ticketLimitDto.setVoteCount(ticketLimit.getCount() - userVoteCount);
                 ticketLimitDtoList.add(ticketLimitDto);
             }
         }

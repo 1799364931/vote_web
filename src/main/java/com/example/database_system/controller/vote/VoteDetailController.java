@@ -27,7 +27,7 @@ public class VoteDetailController {
     }
 
     //无需鉴权 这里记得放行
-    @GetMapping("/vote={voteId}")
+    @GetMapping("/api/vote={voteId}")
     @Tag(name = "获取投票详情", description = "用于获取指定投票的详细信息，无需鉴权")
     public ResponseMessage<VoteDetailDto> getVote(@PathVariable UUID voteId) {
         return voteService.getDetailVote(voteId);
