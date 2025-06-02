@@ -39,9 +39,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     const ticketItem = document.createElement("li");
                     ticketItem.className = "vote-limit-item";
                     ticketItem.innerHTML = `
-                          <p>${ticket.description}</p>
-                          <label for="${ticket.ticketId}">选择可投票数：</label>
-                          <input type="range" id="${ticket.ticketId}" min="1" max="10" value="1">
+                          <p class = "ticket-description">${ticket.description} 选择可投票数：</p>
+                          <label for="${ticket.ticketId}"></label>
+                          <input type="range" id="${ticket.ticketId}" min="0" max="10" value="1">
                           <span id="${ticket.ticketId}value">1</span>
                     `;
                     voteLimitList.appendChild(ticketItem);
@@ -86,7 +86,8 @@ function getVoteDto() {
         description: voteDescription,
         startTime: startTime,
         endTime: endTime,
-        isTimeout: isTimeout
+        isTimeout: isTimeout,
+        id:null
     };
 }
 
@@ -96,6 +97,7 @@ function getOptionalList() {
     optionInputs.forEach(input => {
         if (input.value.trim() !== "") { // 确保选项不为空
             options.push({
+                id:null,
                 description: input.value.trim(),
                 position: options.length + 1, // 选项位置
                 voteCount: 0 // 初始投票数为0

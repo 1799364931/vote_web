@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     optionItem.id = `vote-option-item-${option.id}`; // 设置选项ID
                     optionItem.innerHTML = `
                         <p class = "vote-option-description">${option.description}</p>
-                        <p class = "vote-count">${option.voteCount}</p>
+                        <p class = "vote-count">已投票数:${option.voteCount}</p>
                         <button class ="vote-button" id="vote-button">投票！</button>
                     `;
                     optionsList.appendChild(optionItem);
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                         //更新剩余票数
                                         const remainingSpan = document.getElementById(`${ticket.ticketId}remaining`);
                                         remainingSpan.innerText = (parseInt(remainingSpan.innerText, 10) - 1).toString();
-                                        //window.location.reload(); // 刷新页面以显示最新的投票结果
+                                        window.location.reload(); // 刷新页面以显示最新的投票结果
                                     } else {
                                         alert(data.message);
                                     }

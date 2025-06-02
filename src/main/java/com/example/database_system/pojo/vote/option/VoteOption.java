@@ -1,7 +1,9 @@
-package com.example.database_system.pojo.vote;
+package com.example.database_system.pojo.vote.option;
 
+import com.example.database_system.pojo.vote.Vote;
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Table(name = "tb_vote_option")
@@ -20,6 +22,10 @@ public class VoteOption {
     @ManyToOne
     @JoinColumn(name = "vote_id")
     private Vote vote;
+
+    //一个选项可以有多个资源，例如图片、音频等
+    @OneToMany(mappedBy = "voteOption", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<OptionResource> optionResource;
 
     public VoteOption() {
         voteCount = 0;
@@ -63,5 +69,12 @@ public class VoteOption {
 
     public void setPosition(Integer position) {
         this.position = position;
+    }
+
+    public void addVoteCount(Integer count) {
+        if (count == null || count < 0) {
+            throw new IllegalArgumentException("投票数不能为负数");
+        }
+        this.voteCount += count;
     }
 }

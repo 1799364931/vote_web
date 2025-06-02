@@ -24,8 +24,9 @@
         </li>
     </ul>
     <div class="search-container">
-        <input type="text" placeholder="搜索投票..."/>
-        <button>
+        <input type="text" id = "search-input" placeholder="搜索投票..."/>
+        <button onclick="searchVote()">
+            <!-- 考虑搜索新建一个页面-->
             搜索
         </button>
     </div>
@@ -35,6 +36,14 @@
         </a>
     </div>
 </nav>
+<!--显示投票-->
+<div class = "vote-container" id = "vote-container">
+    <ul class = "vote-list" id = "vote-list">
+        <li class = "vote-item" id = "vote-item">
 
+        </li>
+    </ul>
+</div>
+<script src = "/js/homeScript.js"></script>
 </body>
 </html>

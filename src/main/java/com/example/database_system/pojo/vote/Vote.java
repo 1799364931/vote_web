@@ -3,6 +3,7 @@ package com.example.database_system.pojo.vote;
 import com.example.database_system.pojo.ticket.TicketLimit;
 import com.example.database_system.pojo.record.VoteDefineLog;
 import com.example.database_system.pojo.user.User;
+import com.example.database_system.pojo.vote.option.VoteOption;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;

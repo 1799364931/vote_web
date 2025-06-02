@@ -255,3 +255,17 @@ body {
     margin: 0; /* Remove default margin */
     flex: 1; /* Allow the description to take up remaining space */
 }
+
+.vote-option-description {
+    flex: 1; /* Occupy remaining space */
+    margin-right: 5px; /* Reduce right margin for closer spacing */
+    font-size: 16px; /* Font size */
+    color: #333; /* Text color */
+}
+
+.vote-count {
+    font-size: 14px; /* Font size */
+    color: #666; /* Text color */
+    margin-left: 5px; /* Reduce left margin for closer spacing */
+    margin-right: 5px;
+}

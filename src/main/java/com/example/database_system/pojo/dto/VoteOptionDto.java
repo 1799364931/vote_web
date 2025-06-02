@@ -1,7 +1,7 @@
 package com.example.database_system.pojo.dto;
 
 
-import com.example.database_system.pojo.vote.VoteOption;
+import com.example.database_system.pojo.vote.option.VoteOption;
 
 import java.util.UUID;
 

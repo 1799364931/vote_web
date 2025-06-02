@@ -12,7 +12,7 @@ import com.example.database_system.pojo.record.VoteRecordId;
 import com.example.database_system.pojo.response.ResponseMessage;
 import com.example.database_system.pojo.ticket.TicketLimit;
 import com.example.database_system.pojo.vote.Vote;
-import com.example.database_system.pojo.vote.VoteOption;
+import com.example.database_system.pojo.vote.option.VoteOption;
 import com.example.database_system.repository.ticket.TicketLimitRepository;
 import com.example.database_system.repository.ticket.TicketRepository;
 import com.example.database_system.repository.user.UserRepository;
@@ -245,6 +245,8 @@ public class VoteService {
         voteOptionRecord.setVoteOption(voteOption.get());
         voteOptionRecord.setTicket(ticket.get());
         voteOptionRecord.setVoter(user.get());
+
+        voteOption.get().addVoteCount(ticket.get().getWeight());
         //记录投票
         statisticUserVoteRecordCountGroupByTicketRes.addVoteCount(1);
         voteOptionRecordRepository.save(voteOptionRecord);

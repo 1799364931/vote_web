@@ -1,6 +1,6 @@
 package com.example.database_system.repository.vote;
 
-import com.example.database_system.pojo.vote.VoteOption;
+import com.example.database_system.pojo.vote.option.VoteOption;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,3 +1,11 @@
+
+body {
+    margin: 0; /* 移除默认边距 */
+    padding-top: 50px; /* 确保内容不被导航栏遮挡 */
+    font-family: Arial, sans-serif; /* 设置全局字体 */
+    background-color: #f8f8f8; /* 设置背景颜色 */
+}
+
 .navbar {
     position: fixed; /* 让导航栏固定在顶部 */
     top: 0;
@@ -43,7 +51,6 @@
     position: absolute; /* 绝对定位 */
     right: 20px; /* 距离右侧20px */
     align-self: center; /* 距离顶部10px */
-
     display: flex;
     align-items: center;
 }
@@ -72,7 +79,6 @@
     width: 100%; /* 让输入框填充整个容器 */
 }
 
-
 .search-container button {
     position: absolute;
     right: 5px; /* 按钮贴近输入框右侧 */
@@ -91,3 +97,72 @@
     background-color: pink;
 }
 
+/* 投票信息 */
+.vote-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 水平居中 */
+    margin-top: 60px; /* 确保投票信息不被导航栏遮挡 */
+}
+
+.vote-list{
+    list-style: none; /* 去掉列表项的默认样式 */
+    padding: 0; /* 去掉内边距 */
+    margin: 0; /* 去掉外边距 */
+    width: 100%; /* 让列表宽度填满容器 */
+}
+.vote-item {
+    display: flex;
+    justify-content: space-between; /* 两端对齐 */
+    align-items: center; /* 垂直居中 */
+    padding: 10px 20px; /* 增加内边距 */
+    border-bottom: 1px solid #ddd; /* 添加底部边框 */
+    transition: background-color 0.3s ease; /* 平滑过渡效果 */
+    width: 80%; /* 设置宽度为父容器的80% */
+    margin: 0 auto; /* 水平居中 */
+}
+
+.vote-item:hover {
+    background-color: #f9f9f9; /* 鼠标悬停时改变背景颜色 */
+}
+
+.vote-item-link {
+    display: block; /* Make the link a block element */
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Inherit text color */
+    padding: 10px 20px; /* Add padding for spacing */
+    background-color: #fff; /* Set background color */
+    border-radius: 5px; /* Add rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow for better visibility */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+    width: 100%; /* 让链接填满整个投票项 */
+}
+
+.vote-item-link:hover {
+    background-color: #f9f9f9; /* Change background color on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
+    cursor: pointer; /* Change cursor to pointer */
+}
+
+.vote-item-title {
+    font-size: 18px; /* 设置标题字体大小 */
+    font-weight: bold; /* 设置标题加粗 */
+    color: #333; /* 设置标题颜色 */
+}
+
+.vote-item-description {
+    font-size: 14px; /* 设置描述字体大小 */
+    color: #666; /* 设置描述颜色 */
+    margin-top: 5px; /* 增加标题和描述之间的间距 */
+}
+
+.vote-item-date {
+    font-size: 12px; /* 设置日期字体大小 */
+    color: #999; /* 设置日期颜色 */
+    margin-top: 5px; /* 增加日期和描述之间的间距 */
+}
+
+.vote-item-timeout{
+    font-size: 12px; /* 设置超时时间字体大小 */
+    margin-top: 5px; /* 增加超时时间和描述之间的间距 */
+}

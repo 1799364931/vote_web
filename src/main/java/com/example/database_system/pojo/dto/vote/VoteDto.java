@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public class VoteDto {
 
+
     private String title;
     private String description;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT+8")
@@ -17,6 +18,7 @@ public class VoteDto {
     private Timestamp endTime;
     private Boolean isTimeout;
 
+    private UUID id;
 
     public VoteDto() {
 
@@ -28,6 +30,7 @@ public class VoteDto {
         this.startTime = vote.getStartTime();
         this.endTime = vote.getEndTime();
         this.isTimeout = this.endTime.before(new Timestamp(System.currentTimeMillis()));
+        this.id = vote.getId();
     }
 
     public VoteDto(String title, String description, Timestamp startTime, Timestamp endTime, Boolean isTimeout) {
@@ -36,6 +39,14 @@ public class VoteDto {
         this.startTime = startTime;
         this.endTime = endTime;
         this.isTimeout = isTimeout;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public Boolean getTimeout() {
