@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,17 +38,17 @@ public class VoteController {
 
     @PostMapping("api/create")
     @Tag(name = "创建投票", description = "用于创建新的投票信息，需鉴权")
-    public ResponseMessage<UUID> createVote(HttpServletRequest request, @RequestBody VoteCreateRequestDto voteCreateRequestDto) {
+    public ResponseMessage<UUID> createVote(HttpServletRequest request,
+                                            @RequestPart("voteData") VoteCreateRequestDto voteCreateRequestDto,
+                                            @RequestPart(value = "file",required = false) List<MultipartFile> fileList){
         String token = request.getHeader("Authorization").replace("Bearer", "");
         UUID userId = jwtUtils.validateToken(token)? jwtUtils.getIdFromToken(token) : null;
         return voteService.createVote(voteCreateRequestDto.getVoteOptionDtoList(), voteCreateRequestDto.getVoteDto(), userId, voteCreateRequestDto.getTicketLimitDtoList());
     }
 
-
     @DeleteMapping("api/delete/{voteId}")
     @Tag(name = "删除投票", description = "用于删除指定的投票信息，需鉴权")
     public ResponseMessage<VoteDto> deleteVote(HttpServletRequest request, @PathVariable UUID voteId) {
-        //这里需要先鉴权
         String token = request.getHeader("Authorization").replace("Bearer", "");
         UUID userId = jwtUtils.validateToken(token)? jwtUtils.getIdFromToken(token) : null;
         return voteService.deleteVote(voteId, userId);

@@ -1,18 +1,53 @@
+
 document.getElementById("add-vote-option-btn").addEventListener("click", function () {
     const optionsList = document.getElementById("vote-option-list");
     const optionDiv = document.createElement("li");
     optionDiv.className = "vote-option-node";
-
-
     optionDiv.innerHTML = `
-      <input type="text" class="vote-option-input" placeholder="请输入选项内容"/>
-      <button class = "remove-option-btn"> 删除</button>
+        <input type ="text" class="vote-option-input" id = "vote-option-input" placeholder="请输入选项内容"/>
+        <input type ="file" class="vote-option-file" id = "vote-option-file" accept="image/*" placeholder="上传图像"/>
+        <button class = "remove-option-btn"> 删除</button>
     `;
-    // 将新创建的选项添加到选项容器中
+    // 将新创建的选项添加到选项列表中
     optionsList.appendChild(optionDiv);
+    // 预览图像
+    const fileInput = optionDiv.querySelector(".vote-option-file");
+    fileInput.addEventListener("change", function () {
+        const file = fileInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                // 创建一个图像元素来显示预览
+                const imgPreview = document.createElement("img");
+                imgPreview.src = e.target.result;
+                imgPreview.style.maxWidth = "100px"; // 设置最大宽度
+                imgPreview.style.maxHeight = "100px"; // 设置最大高度
+                imgPreview.alt = "选项图像预览";
+                //设置图像
+                imgPreview.style.display = "block";
+                imgPreview.style.marginTop = "10px"; // 设置上边距
+                imgPreview.style.marginBottom = "10px"; // 设置下边距
+                imgPreview.style.objectFit = "cover"; // 保持图像比例
+
+                // 如果已经有预览图像，则替换它
+                const existingImg = optionDiv.querySelector("img");
+                if (existingImg) {
+                    optionDiv.replaceChild(imgPreview, existingImg);
+                } else {
+                    optionDiv.prepend(imgPreview);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
 
     // 添加删除按钮的事件监听器
     optionDiv.querySelector(".remove-option-btn").addEventListener("click", function () {
+        //弹出确认对话框
+        if (!confirm("确定要删除这个选项吗？")) {
+            return;
+        }
         optionsList.removeChild(optionDiv);
     });
 });
