@@ -7,6 +7,7 @@ import java.util.UUID;
 
 public class VoteOptionDto {
 
+    private UUID id ;
     private String description;
     private Integer position;
 
@@ -20,6 +21,15 @@ public class VoteOptionDto {
         this.description = voteOption.getDescription();
         this.position = voteOption.getPosition();
         this.voteCount = voteOption.getVoteCount();
+        this.id  = voteOption.getId();
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public Integer getVoteCount() {

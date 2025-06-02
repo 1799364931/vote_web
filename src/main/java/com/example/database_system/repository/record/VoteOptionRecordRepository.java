@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 @Repository
 public interface VoteOptionRecordRepository extends JpaRepository<VoteOptionRecord, UUID> {
@@ -17,7 +18,7 @@ public interface VoteOptionRecordRepository extends JpaRepository<VoteOptionReco
                     "GROUP BY ticket_id " +
                     "HAVING ticket_id = :ticket_id",
             nativeQuery = true)
-    public Integer statisticUserVoteRecordCountGroupByTicket(
+    public List<Integer> statisticUserVoteRecordCountGroupByTicket(
             @Param("user_id") UUID userId,
             @Param("vote_id") UUID voteId,
             @Param("ticket_id") UUID ticketId);
@@ -29,7 +30,7 @@ public interface VoteOptionRecordRepository extends JpaRepository<VoteOptionReco
                     "GROUP BY ticket_id" +
                     "Having ticket_id = :ticket_id",
             nativeQuery = true)
-    public Integer statisticUserVoteRecordCountGroupByTicket(
+    public List<Integer> statisticUserVoteRecordCountGroupByTicket(
             @Param("user_id") UUID userId,
             @Param("vote_option_id") UUID voteOptionId);
 }

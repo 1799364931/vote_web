@@ -35,7 +35,17 @@ public class JwtUtils {
         try {
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
             return true;
+        } catch (ExpiredJwtException e) {
+            System.out.println("Token 已过期");
+            return false;
+        } catch (MalformedJwtException e) {
+            System.out.println("Token 格式错误");
+            return false;
+        } catch (SignatureException e) {
+            System.out.println("Token 签名无效");
+            return false;
         } catch (Exception e) {
+            System.out.println("Token 验证失败");
             return false;
         }
     }
@@ -60,6 +70,7 @@ public class JwtUtils {
                 .getBody()
                 .get("id", String.class));
     }
+
 
 
 }

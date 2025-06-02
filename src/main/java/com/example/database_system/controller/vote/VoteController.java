@@ -38,11 +38,8 @@ public class VoteController {
     @PostMapping("api/create")
     @Tag(name = "创建投票", description = "用于创建新的投票信息，需鉴权")
     public ResponseMessage<UUID> createVote(HttpServletRequest request, @RequestBody VoteCreateRequestDto voteCreateRequestDto) {
-
         String token = request.getHeader("Authorization").replace("Bearer", "");
-        System.out.println(token);
-        UUID userId = jwtUtils.getIdFromToken(token);
-        System.out.println(token + userId.toString());
+        UUID userId = jwtUtils.validateToken(token)? jwtUtils.getIdFromToken(token) : null;
         return voteService.createVote(voteCreateRequestDto.getVoteOptionDtoList(), voteCreateRequestDto.getVoteDto(), userId, voteCreateRequestDto.getTicketLimitDtoList());
     }
 
@@ -52,7 +49,7 @@ public class VoteController {
     public ResponseMessage<VoteDto> deleteVote(HttpServletRequest request, @PathVariable UUID voteId) {
         //这里需要先鉴权
         String token = request.getHeader("Authorization").replace("Bearer", "");
-        UUID userId = jwtUtils.getIdFromToken(token);
+        UUID userId = jwtUtils.validateToken(token)? jwtUtils.getIdFromToken(token) : null;
         return voteService.deleteVote(voteId, userId);
     }
 

@@ -8,6 +8,7 @@ import com.example.database_system.pojo.dto.vote.VoteDto;
 import com.example.database_system.pojo.record.VoteDefineLog;
 import com.example.database_system.pojo.record.VoteOptionRecord;
 import com.example.database_system.pojo.record.VoteRecord;
+import com.example.database_system.pojo.record.VoteRecordId;
 import com.example.database_system.pojo.response.ResponseMessage;
 import com.example.database_system.pojo.ticket.TicketLimit;
 import com.example.database_system.pojo.vote.Vote;
@@ -100,6 +101,7 @@ public class VoteService {
 
         //新增一条log
         VoteDefineLog voteDefineLog = new VoteDefineLog("CREATE", new Timestamp(System.currentTimeMillis()), creator.get(), newVote);
+        voteDefineLogRepository.save(voteDefineLog);
         return ResponseMessage.success(newVote.getId(), "Create vote success");
     }
 
@@ -147,12 +149,13 @@ public class VoteService {
     //下面是详情页的service接口
 
     //获取当前的vote所有信息(用于生成vote详情页)
-    public ResponseMessage<VoteDetailDto> getDetailVote(UUID voteId) {
+    public ResponseMessage<VoteDetailDto> getDetailVote(UUID voteId,UUID userId) {
         VoteDetailDto voteDetailDto = new VoteDetailDto();
         //获取投票的创建者
         var vote = voteRepository.findById(voteId);
         List<VoteOptionDto> voteOptionDtoList = new ArrayList<>();
         List<TicketLimitDto> ticketLimitDtoList = new ArrayList<>();
+
         if (vote.isEmpty()) {
             return ResponseMessage.error(null, "vote not exist", HttpStatus.BAD_REQUEST.value());
         }
@@ -161,10 +164,44 @@ public class VoteService {
             voteOptionDtoList.add(new VoteOptionDto(vote.get().getVoteOptions().get(i)));
         }
 
-        for (int i = 0; i < vote.get().getTicketLimits().size(); i++) {
-            ticketLimitDtoList.add(new TicketLimitDto(vote.get().getTicketLimits().get(i)));
-        }
 
+
+        // limitDto 的票数是剩余可投票数
+        //如果用户未登录
+        if(userId == null){
+            for (var ticketLimit : vote.get().getTicketLimits()) {
+                TicketLimitDto ticketLimitDto = new TicketLimitDto(ticketLimit);
+                ticketLimitDtoList.add(ticketLimitDto);
+            }
+        }
+        else{
+            //如果用户登录了
+            var user = userRepository.findById(userId);
+            if (user.isEmpty()) {
+                return ResponseMessage.error(null, "user not exist", HttpStatus.BAD_REQUEST.value());
+            }
+            for (var ticketLimit : vote.get().getTicketLimits()) {
+                TicketLimitDto ticketLimitDto = new TicketLimitDto(ticketLimit);
+                //获取当前用户在当前投票中投的所有票
+                var statisticUserVoteRecordCountGroupByTicketRes = voteRecordRepository.findByUserAndVoteAndTicket(
+                        user.get(),
+                        vote.get(),
+                        ticketLimit.getTicket());
+                if(statisticUserVoteRecordCountGroupByTicketRes == null){
+                    statisticUserVoteRecordCountGroupByTicketRes = new VoteRecord();
+                    statisticUserVoteRecordCountGroupByTicketRes.setUser(user.get());
+                    statisticUserVoteRecordCountGroupByTicketRes.setVote(vote.get());
+                    statisticUserVoteRecordCountGroupByTicketRes.setTicket(ticketLimit.getTicket());
+                    statisticUserVoteRecordCountGroupByTicketRes.setVoteCount(0);
+                    statisticUserVoteRecordCountGroupByTicketRes.setVoteId(
+                            new VoteRecordId(user.get().getId(), vote.get().getId(), ticketLimit.getTicket().getId())
+                    );
+                }
+                Integer limitCount = ticketLimitRepository.findByVoteAndTicket(vote.get(), ticketLimit.getTicket()).getCount();
+                ticketLimitDto.setVoteCount(limitCount - statisticUserVoteRecordCountGroupByTicketRes.getVoteCount());
+                ticketLimitDtoList.add(ticketLimitDto);
+            }
+        }
         voteDetailDto.setVoteDto(new VoteDto(vote.get()));
         voteDetailDto.setCreator(new UserDto(vote.get().getCreatorId()));
         voteDetailDto.setVoteOptionDtoList(voteOptionDtoList);
@@ -194,9 +231,12 @@ public class VoteService {
             statisticUserVoteRecordCountGroupByTicketRes.setVote(vote.get());
             statisticUserVoteRecordCountGroupByTicketRes.setTicket(ticket.get());
             statisticUserVoteRecordCountGroupByTicketRes.setVoteCount(0);
+            statisticUserVoteRecordCountGroupByTicketRes.setVoteId(
+                    new VoteRecordId(user.get().getId(), vote.get().getId(), ticket.get().getId())
+            );
         }
 
-        Integer limitCount = ticketLimitRepository.findDistinctByVoteAndTicket(vote.get(), ticket.get());
+        Integer limitCount = ticketLimitRepository.findByVoteAndTicket(vote.get(), ticket.get()).getCount();
         if (statisticUserVoteRecordCountGroupByTicketRes.getVoteCount() >= limitCount) {
             return ResponseMessage.error(null, "Reach this ticket limit count", HttpStatus.BAD_REQUEST.value());
         }

@@ -42,14 +42,14 @@
     <hr>
     <p class="vote-description" id="vote-description">投票描述</p>
     </div>
-    <div class="vote-limit-wrapper" id="vote-limit-wrapper">
-        <ul class="vote-limit-list" id="vote-limit-list">
-            <li class="vote-limit-item" id="vote-limit-item">
-                <!-- 显示每一类可以投多少票 -->
-                <p>
-            </li>
-        </ul>
-    </div>
+<!--    <div class="vote-limit-wrapper" id="vote-limit-wrapper">-->
+<!--        <ul class="vote-limit-list" id="vote-limit-list">-->
+<!--            <li class="vote-limit-item" id="vote-limit-item">-->
+<!--                &lt;!&ndash; 显示每一类可以投多少票 &ndash;&gt;-->
+<!--                <p>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
     <div class = "vote-time-wrapper" id="vote-time-wrapper">
         <ul class="vote-time-list" id="vote-time-list">
             <li class="vote-time-item" id="vote-start-time-item">
@@ -64,7 +64,7 @@
     </div>
     <div class = "vote-creator-wrapper">
         <label for="vote-creator">创建者：</label>
-        <span id="vote-creator">张三</span>
+        <span id="vote-creator"></span>
     </div>
 </div>
 
@@ -73,8 +73,6 @@
 <div class="vote-option-container" id="vote-option-container">
     <ul class="vote-option-list" id="vote-option-list">
         <li class="vote-option-item" id="vote-option-item">
-                <p class = "vote-option-description">简单的描述</p>
-                <button class ="vote-button" id="vote-button">投票！</button>
         </li>
     </ul>
 </div>
@@ -84,14 +82,7 @@
 <div id="vote-modal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        <h2>投票权重详情</h2>
         <ul class = "vote-limit-list-modal" id = "vote-limit-list-modal">
-            <li class = "vote-limit-item-modal" id = "vote-limit-item-modal">
-                <p class = "vote-limit-description">简单的描述</p>
-                <button class = "vote-limit-item-button-modal" id = "vote-limit-item-button-modal">
-                投票
-                </button>
-            </li>
         </ul>
     </div>
 </div>

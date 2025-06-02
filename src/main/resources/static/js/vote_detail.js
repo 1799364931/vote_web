@@ -4,11 +4,11 @@
 
 
 let voteOptionId = undefined;//全局变量 当用户点击投票按钮时，获取当前选项的值
-document.getElementById("vote-button").addEventListener("click", function () {
-    voteOptionId = document.querySelector(".vote-option-item .vote-button").id; // 获取当前选项的ID
-    //让小窗显示
-    document.getElementById("vote-modal").style.display = "block";
-});
+// document.getElementById("vote-button").addEventListener("click", function () {
+//     voteOptionId = document.querySelector(".vote-option-item .vote-button").id; // 获取当前选项的ID
+//     //让小窗显示
+//     document.getElementById("vote-modal").style.display = "block";
+// });
 
 document.querySelector(".close").addEventListener("click", function () {
     document.getElementById("vote-modal").style.display = "none";
@@ -47,7 +47,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById("vote-start-time").innerText = new Date(vote.startTime).toLocaleString();
                 document.getElementById("vote-end-time").innerText = new Date(vote.endTime).toLocaleString();
                 document.getElementById("vote-creator").innerText = data.data.creator.account;
-
                 const optionsList = document.getElementById("vote-option-list");
 
                 //排序 根据vote count
@@ -67,26 +66,35 @@ document.addEventListener("DOMContentLoaded", function () {
                     voteButton.addEventListener("click", function () {
                         voteOptionId = option.id; // 获取当前选项的ID
                         document.getElementById("vote-modal").style.display = "block";
+                        if(localStorage.getItem('token') === null) {
+                            alert("请先登录！");
+                            document.getElementById("vote-modal").style.display = "none";
+                        }
                     });
                 });
 
                 //生成投票小窗口
+
+                if(localStorage.getItem("token") === null){
+                    return;
+                }
+
                 voteLimitList.forEach(
                     ticket => {
                         const ticketItem = document.createElement("li");
                         ticketItem.className = "vote-limit-item-modal";
                         ticketItem.innerHTML = `
-                            <p>${ticket.description}</p>
-                            <p>剩余票数：<span id="${ticket.ticketId}remaining">${ticket.voteCount}</span></p>
-                            <button class = "vote-button">投票</button>
+                            <p>${ticket.description}
+                            剩余票数：<span id="${ticket.ticketId}remaining">${ticket.voteCount}</span></p>
+                            <button class = "vote-limit-item-button-modal" id = "vote-limit-item-button-modal">投票</button>
                         `;
                         document.getElementById("vote-limit-list-modal").appendChild(ticketItem);
-                        const voteButton = ticketItem.querySelector(".vote-button");
+                        const voteButton = ticketItem.querySelector(".vote-limit-item-button-modal");
                         voteButton.addEventListener("click", () => {
-                            const voteLimitDtoList = getVoteLimitDtoList();
-                            const voteDto = getVoteDto();
-                            if (!voteDto) return; // 如果获取投票信息失败，则返回
-                            fetch(`http://localhost:8888/api/vote/vote=${voteId}/vote-option=${voteOptionId}/ticket=${ticket.ticketId}`, {
+                            //const voteLimitDtoList = getVoteLimitDtoList();
+                            // const voteDto = getVoteDto();
+                            // if (!voteDto) return; // 如果获取投票信息失败，则返回
+                            fetch(`http://localhost:8888/vote-detail/api/vote/vote=${voteId}/vote-option=${voteOptionId}/ticket=${ticket.ticketId}`, {
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json",
@@ -99,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                         //更新剩余票数
                                         const remainingSpan = document.getElementById(`${ticket.ticketId}remaining`);
                                         remainingSpan.innerText = (parseInt(remainingSpan.innerText, 10) - 1).toString();
-                                        window.location.reload(); // 刷新页面以显示最新的投票结果
+                                        //window.location.reload(); // 刷新页面以显示最新的投票结果
                                     } else {
                                         alert(data.message);
                                     }

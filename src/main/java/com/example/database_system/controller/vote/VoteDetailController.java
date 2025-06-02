@@ -29,17 +29,20 @@ public class VoteDetailController {
     //无需鉴权 这里记得放行
     @GetMapping("/api/vote={voteId}")
     @Tag(name = "获取投票详情", description = "用于获取指定投票的详细信息，无需鉴权")
-    public ResponseMessage<VoteDetailDto> getVote(@PathVariable UUID voteId) {
-        return voteService.getDetailVote(voteId);
+    public ResponseMessage<VoteDetailDto> getVote(@PathVariable UUID voteId, HttpServletRequest request) {
+        String token = request.getHeader("Authorization").replace("Bearer", "");
+        UUID userId = jwtUtils.validateToken(token)? jwtUtils.getIdFromToken(token) : null;
+        return voteService.getDetailVote(voteId,userId);
     }
 
     //提交投票 这里要鉴权
     @PostMapping("api/vote/vote={voteId}/vote-option={voteOptionId}/ticket={ticketId}")
     @Tag(name = "提交投票", description = "用于提交对指定投票的投票选项，需鉴权")
-    public ResponseMessage<Integer> voteFor(@PathVariable UUID voteId, @PathVariable UUID ticketId, @PathVariable UUID voteOptionId, HttpServletRequest request) {
+    public ResponseMessage<Integer> voteFor(@PathVariable UUID voteId, @PathVariable UUID voteOptionId,@PathVariable UUID ticketId, HttpServletRequest request) {
         //这里需要先鉴权
         String token = request.getHeader("Authorization").replace("Bearer", "");
-        UUID userId = jwtUtils.getIdFromToken(token);
+        UUID userId = jwtUtils.validateToken(token)? jwtUtils.getIdFromToken(token) : null;
+
         return voteService.voteFor(voteId, voteOptionId, userId, ticketId);
     }
 
