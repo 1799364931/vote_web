@@ -39,8 +39,7 @@ public class VoteController {
     @PostMapping("api/create")
     @Tag(name = "创建投票", description = "用于创建新的投票信息，需鉴权")
     public ResponseMessage<UUID> createVote(HttpServletRequest request,
-                                            @RequestPart("voteData") VoteCreateRequestDto voteCreateRequestDto,
-                                            @RequestPart(value = "file",required = false) List<MultipartFile> fileList){
+                                            @RequestBody VoteCreateRequestDto voteCreateRequestDto){
         String token = request.getHeader("Authorization").replace("Bearer", "");
         UUID userId = jwtUtils.validateToken(token)? jwtUtils.getIdFromToken(token) : null;
         return voteService.createVote(voteCreateRequestDto.getVoteOptionDtoList(), voteCreateRequestDto.getVoteDto(), userId, voteCreateRequestDto.getTicketLimitDtoList());

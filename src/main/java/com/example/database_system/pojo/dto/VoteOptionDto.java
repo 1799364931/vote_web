@@ -10,9 +10,10 @@ public class VoteOptionDto {
     private UUID id ;
     private String description;
     private Integer position;
-
     //vote count记录权重 而不是实际投票数
     private Integer voteCount;
+
+    private String resourceUrl;
 
     public VoteOptionDto() {
     }
@@ -54,6 +55,14 @@ public class VoteOptionDto {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getResourceUrl() {
+        return resourceUrl;
+    }
+
+    public void setResourceUrl(String resourceUrl) {
+        this.resourceUrl = resourceUrl;
     }
 
     @Override

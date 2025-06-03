@@ -58,10 +58,23 @@ document.addEventListener("DOMContentLoaded", function () {
                     optionItem.id = `vote-option-item-${option.id}`; // 设置选项ID
                     optionItem.innerHTML = `
                         <p class = "vote-option-description">${option.description}</p>
+                        <!-- 如果有资源则插入 -->
+                        ${option.resourceUrl ? 
+                        `<img src="http://localhost:8888/files/${option.resourceUrl}" class = "vote-option-image" alt="选项图片">` : ""
+                        }
                         <p class = "vote-count">已投票数:${option.voteCount}</p>
                         <button class ="vote-button" id="vote-button">投票！</button>
                     `;
                     optionsList.appendChild(optionItem);
+                    //设置图片格式
+                    const image = optionItem.querySelector(".vote-option-image");
+                    if (image) {
+                        image.style.maxWidth = "100px";
+                        image.style.maxHeight = "100px"; // 设置图片最大高度
+                        image.style.height = "auto"; // 保持图片高度自适应
+                    }
+
+
                     const voteButton = optionItem.querySelector(".vote-button");
                     voteButton.addEventListener("click", function () {
                         voteOptionId = option.id; // 获取当前选项的ID

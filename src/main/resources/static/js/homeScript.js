@@ -44,6 +44,14 @@ function searchVote() {
 function generateVoteLink(data) {
     const voteList = document.getElementById("vote-list");
     voteList.innerHTML = "";
+    //未超时 =>未开始 =>已超时 的排列顺序
+    data.sort((a, b) => {
+        if (a.isTimeout && !b.isTimeout) return 1; // a 超时，b 未超时
+        if (!a.isTimeout && b.isTimeout) return -1; // a 未超时，b 超时
+        if (new Date(a.startTime) > new Date(b.startTime)) return 1; // a 未开始，b 已开始
+        if (new Date(a.startTime) < new Date(b.startTime)) return -1; // a 已开始，b 未开始
+        return 0; // 相同状态
+    });
     data.forEach(vote => {
         const voteItem = document.createElement("li");
         voteItem.className = "vote-item";

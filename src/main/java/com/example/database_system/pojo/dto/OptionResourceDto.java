@@ -4,20 +4,11 @@ import java.util.UUID;
 
 public class OptionResourceDto {
 
-    private UUID optionId;
+
     private String resourceUrl;
 
     public OptionResourceDto(UUID optionId, String resourceUrl) {
-        this.optionId = optionId;
         this.resourceUrl = resourceUrl;
-    }
-
-    public UUID getOptionId() {
-        return optionId;
-    }
-
-    public void setOptionId(UUID optionId) {
-        this.optionId = optionId;
     }
 
     public String getResourceUrl() {

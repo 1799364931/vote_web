@@ -12,10 +12,12 @@ import com.example.database_system.pojo.record.VoteRecordId;
 import com.example.database_system.pojo.response.ResponseMessage;
 import com.example.database_system.pojo.ticket.TicketLimit;
 import com.example.database_system.pojo.vote.Vote;
+import com.example.database_system.pojo.vote.option.OptionResource;
 import com.example.database_system.pojo.vote.option.VoteOption;
 import com.example.database_system.repository.ticket.TicketLimitRepository;
 import com.example.database_system.repository.ticket.TicketRepository;
 import com.example.database_system.repository.user.UserRepository;
+import com.example.database_system.repository.vote.OptionResourceRepository;
 import com.example.database_system.repository.vote.VoteOptionRepository;
 import com.example.database_system.repository.vote.VoteRepository;
 import com.example.database_system.repository.record.VoteDefineLogRepository;
@@ -38,6 +40,7 @@ public class VoteService {
     private final TicketLimitRepository ticketLimitRepository;
     private final VoteOptionRecordRepository voteOptionRecordRepository;
     private final VoteRecordRepository voteRecordRepository;
+    private final OptionResourceRepository optionResourceRepository;
 
     @Autowired
     public VoteService(VoteRepository voteRepository,
@@ -47,7 +50,8 @@ public class VoteService {
                        TicketRepository ticketRepository,
                        TicketLimitRepository ticketLimitRepository,
                        VoteOptionRecordRepository voteOptionRecordRepository,
-                       VoteRecordRepository voteRecordRepository) {
+                       VoteRecordRepository voteRecordRepository,
+                       OptionResourceRepository optionResourceRepository) {
         this.voteRepository = voteRepository;
         this.voteOptionRepository = voteOptionRepository;
         this.userRepository = userRepository;
@@ -56,6 +60,7 @@ public class VoteService {
         this.ticketLimitRepository = ticketLimitRepository;
         this.voteOptionRecordRepository = voteOptionRecordRepository;
         this.voteRecordRepository = voteRecordRepository;
+        this.optionResourceRepository = optionResourceRepository;
     }
 
     //创建投票
@@ -83,7 +88,16 @@ public class VoteService {
             newVoteOption.setDescription(voteOptionDto.getDescription());
             newVoteOption.setVote(newVote);
             voteOptionRepository.save(newVoteOption);
+
+            if(voteOptionDto.getResourceUrl() != null && !voteOptionDto.getResourceUrl().isEmpty()) {
+                //如果有资源链接就设置
+                OptionResource optionResource = new OptionResource();
+                optionResource.setUrl(voteOptionDto.getResourceUrl());
+                optionResource.setVoteOption(newVoteOption);
+                optionResourceRepository.save(optionResource);
+            }
         }
+
         //新建一个票数限制
         for (TicketLimitDto ticketLimitDto : ticketLimitDtoList) {
             //存储
@@ -109,7 +123,7 @@ public class VoteService {
     public ResponseMessage<List<VoteDto>> getAllVote() {
         List<VoteDto> voteDtoList = new ArrayList<>();
         List<Vote> voteList = voteRepository.findAll();
-        for (Vote vote : voteList) {
+        for( Vote vote : voteList) {
             voteDtoList.add(new VoteDto(vote));
         }
         return ResponseMessage.success(voteDtoList, "success");
@@ -162,6 +176,13 @@ public class VoteService {
 
         for (int i = 0; i < vote.get().getVoteOptions().size(); i++) {
             voteOptionDtoList.add(new VoteOptionDto(vote.get().getVoteOptions().get(i)));
+            //设置资源链接
+            var optionResource = optionResourceRepository.findByVoteOption(vote.get().getVoteOptions().get(i));
+            if (optionResource.isPresent()) {
+                voteOptionDtoList.get(i).setResourceUrl(optionResource.get().getUrl());
+            } else {
+                voteOptionDtoList.get(i).setResourceUrl(null);
+            }
         }
 
 

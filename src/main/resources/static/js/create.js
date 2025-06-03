@@ -4,8 +4,8 @@ document.getElementById("add-vote-option-btn").addEventListener("click", functio
     const optionDiv = document.createElement("li");
     optionDiv.className = "vote-option-node";
     optionDiv.innerHTML = `
-        <input type ="text" class="vote-option-input" id = "vote-option-input" placeholder="请输入选项内容"/>
-        <input type ="file" class="vote-option-file" id = "vote-option-file" accept="image/*" placeholder="上传图像"/>
+        <input type ="text" class="vote-option-input" placeholder="请输入选项内容"/>
+        <input type ="file" class="vote-option-file" accept="image/*" placeholder="上传图像"/>
         <button class = "remove-option-btn"> 删除</button>
     `;
     // 将新创建的选项添加到选项列表中
@@ -125,24 +125,52 @@ function getVoteDto() {
         id:null
     };
 }
-
-function getOptionalList() {
+async function getOptionalList() {
     const options = [];
-    const optionInputs = document.querySelectorAll(".vote-option-input");
-    optionInputs.forEach(input => {
-        if (input.value.trim() !== "") { // 确保选项不为空
-            options.push({
-                id:null,
-                description: input.value.trim(),
-                position: options.length + 1, // 选项位置
-                voteCount: 0 // 初始投票数为0
-            });
+    const optionItems = document.querySelectorAll(".vote-option-node");
+
+    for (const item of optionItems) {
+        const input = item.querySelector(".vote-option-input");
+        const description = input.value.trim();
+        if (description === "") continue;
+
+        const fileInput = item.querySelector(".vote-option-file");
+        let imageUrl = null;
+
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append("file", file);
+
+            try {
+                const response = await fetch("http://localhost:8888/file/api/upload", {
+                    method: "POST",
+                    body: formData,
+                });
+                const data = await response.json();
+                if (data.code === 200) {
+                    imageUrl = data.data.resourceUrl;
+                    alert("图像上传成功！" + imageUrl);
+                } else {
+                    console.error("上传图像失败:", data.message);
+                }
+            } catch (error) {
+                console.error("上传图像时发生错误:", error);
+            }
         }
-    });
+
+        options.push({
+            id: null,
+            description: description,
+            position: options.length + 1,
+            voteCount: 0,
+            resourceUrl: imageUrl,
+        });
+    }
+
     return options;
 }
-
-document.getElementById("submit-vote-btn").addEventListener("click", function (event) {
+document.getElementById("submit-vote-btn").addEventListener("click", async function (event) {
 
     /* <!--
 
@@ -182,7 +210,7 @@ document.getElementById("submit-vote-btn").addEventListener("click", function (e
         window.location.href = "/login";
     }
     const voteDto = getVoteDto();
-    const optionalList = getOptionalList();
+    const optionalList = await getOptionalList();
     const ticketLimitDtoList = getVoteLimitDtoList();
     if (voteDto.title.trim() === "" || voteDto.description.trim() === "" || optionalList.length === 0) {
         alert("请填写完整的投票信息和选项！");
