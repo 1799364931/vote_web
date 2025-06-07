@@ -46,25 +46,19 @@ function generateVoteLink(data) {
     })
 }
 
-
 document.addEventListener("DOMContentLoaded", function() {
-        fetch("http://localhost:8888/vote/api/all-vote", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        .then(response => response.json())
+    fetch("http://localhost:8888/vote/api/get-vote-by-user", {
+        method: "GET",
+        headers:{
+            "Content-Type": "application/json",
+            "authorization": 'Bearer ' + localStorage.getItem('token')
+        }
+    }).then(response => response.json())
         .then(data => {
-            if (data.code !== 200) {
-                throw new Error("获取投票列表失败：" + data.message);
-            } else {
+            if (data.code === 200) {
                 generateVoteLink(data.data);
+            } else {
+                alert(data.message);
             }
-
         })
 })
-
-
-
-

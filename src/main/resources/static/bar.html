@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/navigation_bar.css"/>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-container"></div>
+  <ul class="nav-links">
+    <li class="entry-wrapper">
+      <a href="http://localhost:8888/home">首页</a>
+    </li>
+    <li class="entry-wrapper">
+      <a href="http://localhost:8888/create">创建投票</a>
+    </li>
+    <li class="entry-wrapper">
+      <a href="http://localhost:8888/my-vote">我的投票</a>
+    </li>
+    <li class="entry-wrapper">
+      <a href="http://localhost:8888/user-detail">投票记录</a>
+    </li>
+  </ul>
+  <div class="search-container">
+    <input type="text"  id = "search-input"  placeholder="搜索投票..."/>
+    <button onclick="searchVote()">
+      搜索
+    </button>
+  </div>
+  <div class="user-info">
+      <span id="username">用户名</span>
+      <button id="logout-button" onclick="logout()">登出</button>
+  </div>
+</nav>
+
+<script src="/js/navigation_bar.js"></script>
+
+</body>
+</html>

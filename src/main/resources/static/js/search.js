@@ -48,22 +48,27 @@ function generateVoteLink(data) {
 
 
 document.addEventListener("DOMContentLoaded", function() {
-        fetch("http://localhost:8888/vote/api/all-vote", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
+    const path = window.location.pathname;
+    const query = path.split("/").pop();
+    fetch(`http://localhost:8888/vote/api/search/keyword=${query}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({keyword: query}) // 确保键名与后端匹配
+    })
         .then(response => response.json())
         .then(data => {
-            if (data.code !== 200) {
-                throw new Error("获取投票列表失败：" + data.message);
-            } else {
+            if(data.code === 200){
                 generateVoteLink(data.data);
             }
-
+            else{
+                alert(data.message);
+            }
         })
+        .catch(error => console.error("搜索失败:", error));
 })
+
 
 
 

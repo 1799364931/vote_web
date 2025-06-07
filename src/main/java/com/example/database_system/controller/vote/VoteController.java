@@ -5,6 +5,7 @@ import com.example.database_system.pojo.dto.vote.VoteCreateRequestDto;
 import com.example.database_system.pojo.dto.vote.VoteDto;
 import com.example.database_system.pojo.response.ResponseMessage;
 import com.example.database_system.service.Vote.VoteService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,5 +61,13 @@ public class VoteController {
             return new ResponseMessage<>(400, "Keyword cannot be empty", new ArrayList<>());
         }
         return voteService.searchVote(keyword);
+    }
+
+    @GetMapping("api/get-vote-by-user")
+    @Tag(name = "获取用户创建的投票信息", description = "用于获取用户创建的投票信息，需鉴权")
+    public ResponseMessage<List<VoteDto>> getVoteByUser(HttpServletRequest request) {
+        String token = request.getHeader("Authorization").replace("Bearer", "");
+        UUID userId = jwtUtils.validateToken(token)? jwtUtils.getIdFromToken(token) : null;
+        return voteService.getVoteByUser(userId);
     }
 }

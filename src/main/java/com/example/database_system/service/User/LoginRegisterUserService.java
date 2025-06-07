@@ -31,6 +31,7 @@ public class LoginRegisterUserService {
         user.setAccount(loginRegisterUserDto.getAccount());
         user.setPassword(securityConfig.passwordEncoder().encode(loginRegisterUserDto.getPassword()));
         user.setRole(loginRegisterUserDto.getRole());
+        user.setName(user.getAccount());
         if (userRepository.findByaccount(user.getAccount()).isPresent()) {
             //账户名冲突
             return ResponseMessage.error(loginRegisterUserDto, "账户名已存在，请更换账户名", HttpStatus.BAD_REQUEST.value());

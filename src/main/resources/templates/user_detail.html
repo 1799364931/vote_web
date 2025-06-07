@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>投票记录</title>
+    <link rel="stylesheet" href="/css/user_detail.css">
+    <link rel="stylesheet" href="/css/navigation_bar.css">
+</head>
+<body>
+
+<nav class="navbar">
+</nav>
+<script>
+    fetch("/bar.html")
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector('.navbar').innerHTML = html;
+        })
+        .catch(error => {
+            console.error("Error loading navigation bar:", error);
+        });
+</script>
+
+
+<div class = "vote-record-container">
+    <table title="投票记录" class = "vote-record-table" id= "vote-record-table">
+        <thead class = "vote-record-table-head" id="vote-record-table-head">
+            <tr>
+                <th>投票标题</th>
+                <th>投票选项</th>
+                <th>投票类型</th>
+                <th>投票时间</th>
+            </tr>
+        </thead>
+        <tbody class = "vote-record-table-body" id="vote-record-table-body">
+
+        </tbody>
+    </table>
+</div>
+<script src="/js/user_detail.js" ></script>
+<script src="/js/navigation_bar.js"></script>
+</body>
+</html>

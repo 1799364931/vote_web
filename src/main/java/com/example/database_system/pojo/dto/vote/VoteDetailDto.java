@@ -11,6 +11,15 @@ public class VoteDetailDto {
     private UserDto creator;
     private List<VoteOptionDto> voteOptionDtoList;
     private List<TicketLimitDto> ticketLimitDtoList;
+    private Boolean owner;
+
+    public Boolean getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Boolean owner) {
+        this.owner = owner;
+    }
 
     public VoteDto getVoteDto() {
         return voteDto;

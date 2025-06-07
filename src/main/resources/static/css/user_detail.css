@@ -1,0 +1,52 @@
+
+body {
+    margin: 0;
+    padding-top: 50px;
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+}
+
+.vote-record-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 60px;
+}
+
+.vote-record-table{
+    width: 80%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+.vote-record-table-head{
+    background-color: pink;
+    color: white;
+}
+
+.vote-record-table-head tr{
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    border-bottom: 2px solid #ddd;
+}
+
+.vote-record-table-body{
+    background-color: #fff;
+}
+
+.vote-record-table-body tr{
+    text-align: center;
+    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+
+}
+
+.vote-record-table-body tr:hover{
+    background-color: #f1f1f1;
+    cursor: pointer;
+}

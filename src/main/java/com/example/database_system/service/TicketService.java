@@ -20,21 +20,24 @@ import java.util.UUID;
 
 @Service
 public class TicketService {
-    @Autowired
-    TicketRepository ticketRepository;
+    private final TicketRepository ticketRepository;
+    private final TicketLimitRepository ticketLimitRepository;
+    private final VoteRepository voteRepository;
+    private final UserRepository userRepository;
+    private final VoteRecordRepository voteRecordRepository;
 
     @Autowired
-    TicketLimitRepository ticketLimitRepository;
-
-    @Autowired
-    VoteOptionRecordRepository voteOptionRecordRepository;
-    @Autowired
-    VoteRepository voteRepository;
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    VoteRecordRepository voteRecordRepository;
+    public TicketService(TicketRepository ticketRepository,
+                                 TicketLimitRepository ticketLimitRepository,
+                                 VoteRepository voteRepository,
+                                 UserRepository userRepository,
+                                 VoteRecordRepository voteRecordRepository) {
+        this.ticketRepository = ticketRepository;
+        this.ticketLimitRepository = ticketLimitRepository;
+        this.voteRepository = voteRepository;
+        this.userRepository = userRepository;
+        this.voteRecordRepository = voteRecordRepository;
+    }
 
     public ResponseMessage<List<TicketDto>> getAllTickets() {
         List<Ticket> ticketList = ticketRepository.findAll();

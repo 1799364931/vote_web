@@ -1,5 +1,6 @@
 package com.example.database_system.pojo.vote.option;
 
+import com.example.database_system.pojo.record.VoteOptionRecord;
 import com.example.database_system.pojo.vote.Vote;
 import jakarta.persistence.*;
 
@@ -26,6 +27,9 @@ public class VoteOption {
     //一个选项可以有多个资源，例如图片、音频等
     @OneToMany(mappedBy = "voteOption", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<OptionResource> optionResource;
+
+    @OneToMany(mappedBy = "voteOption", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<VoteOptionRecord> voteOptionRecords;
 
     public VoteOption() {
         voteCount = 0;
@@ -76,5 +80,21 @@ public class VoteOption {
             throw new IllegalArgumentException("投票数不能为负数");
         }
         this.voteCount += count;
+    }
+
+    public List<OptionResource> getOptionResource() {
+        return optionResource;
+    }
+
+    public void setOptionResource(List<OptionResource> optionResource) {
+        this.optionResource = optionResource;
+    }
+
+    public List<VoteOptionRecord> getVoteOptionRecords() {
+        return voteOptionRecords;
+    }
+
+    public void setVoteOptionRecords(List<VoteOptionRecord> voteOptionRecords) {
+        this.voteOptionRecords = voteOptionRecords;
     }
 }

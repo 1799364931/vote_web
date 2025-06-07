@@ -1,102 +1,8 @@
-.navbar {
-    position: fixed; /* 让导航栏固定在顶部 */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 50px; /* 适当调整高度 */
-    display: flex;
-    background-color: white; /* 设置背景颜色，确保阴影可见 */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* 添加底部阴影 */
-}
-
-
-.nav-links {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.nav-links li {
-    margin: 0 15px;
-    padding: 10px 15px;
-    display: inline-block;
-    border: 2px solid transparent; /* 初始边框透明 */
-    transition: all 0.3s ease-in-out; /* 平滑过渡效果 */
-}
-
-.nav-links li:hover {
-    transform: translateY(-2px); /* 让方块稍微浮起 */
-}
-
-.nav-links li a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-}
-
-.nav-links li a:hover {
-    color: pink; /* 鼠标悬停时改变颜色 */
-}
-
-.user-profile {
-    position: absolute; /* 绝对定位 */
-    right: 20px; /* 距离右侧20px */
-    align-self: center; /* 距离顶部10px */
-
-    display: flex;
-    align-items: center;
-}
-
-.user-profile img {
-    width: 40px; /* 头像宽度 */
-    height: 40px; /* 头像高度 */
-    border-radius: 50%; /* 圆形头像 */
-    margin-right: 10px; /* 头像和用户名之间的间距 */
-}
-
-/* 搜索框 */
-.search-container {
-    position: absolute; /* 绝对定位 */
-    right: 10%; /* 距离左侧20px */
-    align-self: center; /* 垂直居中 */
-    display: flex;
-}
-
-.search-container input {
-    border: none; /* 移除边框 */
-    outline: none; /* 去掉焦点时的默认外框 */
-    background-color: #f2f2f2; /* 设置浅灰色背景 */
-    padding: 10px; /* 增加内边距，使输入框更美观 */
-    border-radius: 8px; /* 让输入框边角更柔和 */
-    width: 100%; /* 让输入框填充整个容器 */
-}
-
-
-.search-container button {
-    position: absolute;
-    right: 5px; /* 按钮贴近输入框右侧 */
-    top: 50%;
-    transform: translateY(-50%); /* 让按钮垂直居中 */
-    background-color: lightpink;
-    color: white;
-    border: none;
-    padding: 6px 6px;
-    border-radius: 6px; /* 让按钮的圆角和输入框一致 */
-    cursor: pointer;
-
-}
-
-.search-container button:hover {
-    background-color: pink;
-}
-
-/* 使导航栏在页面滚动时仍然可见 */
 body {
-    margin: 0; /* 移除默认边距 */
-    padding-top: 50px; /* 确保内容不被导航栏遮挡 */
-    font-family: Arial, sans-serif; /* 设置全局字体 */
-    background-color: #f8f8f8; /* 设置背景颜色 */
+    margin: 0;
+    padding-top: 50px;
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
 }
 
 .create-vote-title {
@@ -122,10 +28,10 @@ body {
 
 .vote-description-input {
     width: 50%;
-    min-width: 200px; /* 设置最小宽度，避免过小 */
-    height: 100px; /* 初始高度 */
-    overflow: auto; /* 超出部分可滚动 */
-    resize: none; /* 允许用户调整高度 */
+    min-width: 200px;
+    height: 100px;
+    overflow: auto;
+    resize: none;
     padding: 10px;
     margin: 20px auto;
     display: block;
@@ -137,9 +43,9 @@ body {
 .vote-limit-item{
     list-style: none;
     padding: 0;
-    margin: 10px 0; /* 上下间距 */
-    display: flex; /* 使用flex布局 */
-    align-items: center; /* 垂直居中对齐 */
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
 }
 
 .ticket-description{
@@ -158,16 +64,16 @@ body {
     width: 50%;
     padding: 10px;
     margin: 20px auto;
-    background-color: lightpink; /* 按钮背景色 */
-    color: white; /* 按钮文字颜色 */
-    border: none; /* 移除边框 */
-    border-radius: 5px; /* 圆角按钮 */
-    font-size: 16px; /* 字体大小 */
-    cursor: pointer; /* 鼠标悬停时显示手型 */
+    background-color: lightpink;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
 }
 
 .add-vote-option-btn:hover {
-    background-color: pink; /* 鼠标悬停时改变背景色 */
+    background-color: pink;
 }
 
 .option {
@@ -178,40 +84,40 @@ body {
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
-    box-sizing: border-box; /* 确保padding和border包含在宽度内 */
+    box-sizing: border-box;
 }
 
 
 .vote-option-node {
-    display: flex; /* 使用flex布局 */
-    align-items: center; /* 垂直居中对齐 */
-    margin-bottom: 10px; /* 每个选项之间的间距 */
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
     justify-content: center;
 }
 
 
 .vote-option-input {
-    width: 45%; /* 设置输入框宽度 */
-    padding: 10px; /* 内边距 */
-    margin-right: 10px; /* 输入框和按钮之间的间距 */
-    border: 1px solid #ddd; /* 边框样式 */
-    border-radius: 5px; /* 圆角 */
-    font-size: 16px; /* 字体大小 */
+    width: 45%;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
 .remove-option-btn {
     width: 10%;
     height: 10%;
-    background-color: lightcoral; /* 按钮背景色 */
-    color: white; /* 按钮文字颜色 */
-    border: none; /* 移除边框 */
-    padding: 10px; /* 内边距 */
-    border-radius: 5px; /* 圆角按钮 */
-    cursor: pointer; /* 鼠标悬停时显示手型 */
+    background-color: lightcoral;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .remove-option-btn:hover {
-    background-color: red; /* 鼠标悬停时改变背景色 */
+    background-color: red;
 }
 
 .vote-limit {
@@ -225,8 +131,8 @@ body {
 
 
 .vote-limit-slider[type="range"]::-webkit-slider-thumb {
-    background-color: red; /* 设置滑块颜色 */
-    border-radius: 50%; /* 让滑块变成圆形 */
+    background-color: red;
+    border-radius: 50%;
     width: 20px;
     height: 20px;
     cursor: pointer;
@@ -237,23 +143,23 @@ body {
     width: 50%;
     padding: 10px;
     margin: 20px auto;
-    background-color: deeppink; /* 按钮背景色 */
-    color: white; /* 按钮文字颜色 */
-    border: none; /* 移除边框 */
-    border-radius: 5px; /* 圆角按钮 */
-    font-size: 16px; /* 字体大小 */
-    cursor: pointer; /* 鼠标悬停时显示手型 */
+    background-color: deeppink;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
 }
 
 .submit-vote-btn:hover {
-    background-color: hotpink; /* 鼠标悬停时改变背景色 */
+    background-color: hotpink;
 }
 
 .vote-limit-list {
     display: flex;
-    flex-direction: column; /* 让列表垂直排列 */
-    align-items: center; /* 水平居中对齐 */
-    margin-top: 20px; /* 顶部间距 */
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
 
 }
 
@@ -274,32 +180,32 @@ body {
 
 .vote-limit-list {
     display: flex;
-    flex-direction: column; /* 让列表垂直排列 */
-    align-items: center; /* 水平居中对齐 */
-    margin-top: 20px; /* 顶部间距 */
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
 }
 
 .vote-time-item {
     list-style: none;
     padding: 0;
-    margin: 10px 0; /* 上下间距 */
-    display: flex; /* 使用flex布局 */
-    align-items: center; /* 垂直居中对齐 */
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
 }
 
 .vote-time-item input {
-    width: 60%; /* 输入框宽度 */
-    padding: 10px; /* 内边距 */
-    margin-right: 10px; /* 输入框和按钮之间的间距 */
-    border: 1px solid #ddd; /* 边框样式 */
-    border-radius: 5px; /* 圆角 */
-    font-size: 16px; /* 字体大小 */
+    width: 60%;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
 
 .editor-wrapper {
     border: 1px solid #ccc;
-    z-index: 100; /* 按需定义 */
+    z-index: 100;
 }
 
 .toolbar-container {

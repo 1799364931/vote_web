@@ -9,15 +9,6 @@ public class TicketDto {
     private String description;
     private Integer weight;
 
-    public TicketDto() {
-    }
-
-    public TicketDto(UUID ticketId, String description, Integer weight) {
-        this.ticketId = ticketId;
-        this.description = description;
-        this.weight = weight;
-    }
-
     public TicketDto(Ticket ticket) {
         this.ticketId = ticket.getId();
         this.description = ticket.getDescription();

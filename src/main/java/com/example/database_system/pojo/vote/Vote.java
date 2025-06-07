@@ -1,5 +1,6 @@
 package com.example.database_system.pojo.vote;
 
+import com.example.database_system.pojo.record.VoteRecord;
 import com.example.database_system.pojo.ticket.TicketLimit;
 import com.example.database_system.pojo.record.VoteDefineLog;
 import com.example.database_system.pojo.user.User;
@@ -27,6 +28,9 @@ public class Vote {
     @Column(name = "end_time")
     private Timestamp endTime;
 
+    @Column(name = "is_delete")
+    private Boolean delete = false;
+
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private User creatorId;
@@ -40,7 +44,25 @@ public class Vote {
     @OneToMany(mappedBy = "vote",cascade = CascadeType.ALL)
     private List<TicketLimit> ticketLimits = new ArrayList<>();
 
+    @OneToMany(mappedBy = "vote", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<VoteRecord> voteRecords = new ArrayList<>();
 
+
+    public Boolean getDelete() {
+        return delete;
+    }
+
+    public void setDelete(Boolean delete) {
+        this.delete = delete;
+    }
+
+    public List<VoteRecord> getVoteRecords() {
+        return voteRecords;
+    }
+
+    public void setVoteRecords(List<VoteRecord> voteRecords) {
+        this.voteRecords = voteRecords;
+    }
 
     public UUID getId() {
         return id;

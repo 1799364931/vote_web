@@ -1,14 +1,5 @@
-// document.getElementById("vote-button").addEventListener("click", function () {
-//     document.getElementById("vote-modal").style.display = "block";
-// });
-
 
 let voteOptionId = undefined;//全局变量 当用户点击投票按钮时，获取当前选项的值
-// document.getElementById("vote-button").addEventListener("click", function () {
-//     voteOptionId = document.querySelector(".vote-option-item .vote-button").id; // 获取当前选项的ID
-//     //让小窗显示
-//     document.getElementById("vote-modal").style.display = "block";
-// });
 
 document.querySelector(".close").addEventListener("click", function () {
     document.getElementById("vote-modal").style.display = "none";
@@ -20,14 +11,7 @@ window.onclick = function (event) {
     }
 };
 
-
 document.addEventListener("DOMContentLoaded", function () {
-    /*
-    private VoteDto voteDto;
-    private UserDto creator;
-    private List<VoteOptionDto> voteOptionDtoList;
-    private List<TicketLimitDto> ticketLimitDtoList;
-     */
     const path = window.location.pathname;
     const voteId = path.split('/').pop();
     fetch(`http://localhost:8888/vote-detail/api/vote=${voteId}`, {
@@ -48,6 +32,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById("vote-end-time").innerText = new Date(vote.endTime).toLocaleString();
                 document.getElementById("vote-creator").innerText = data.data.creator.account;
                 const optionsList = document.getElementById("vote-option-list");
+
+                if(data.data.owner) {
+                    const delete_button = document.querySelector("#delete-vote-button");
+                    delete_button.style.display = "block";
+                    delete_button.addEventListener("click", function () {
+                        if (confirm("此操作不可逆转，您确定要删除此投票吗？")) {
+                            fetch(`http://localhost:8888/vote/api/delete/${voteId}`, {
+                                method: "DELETE",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "Authorization": 'Bearer ' + localStorage.getItem('token')
+                                }
+                            }).then(response => response.json())
+                                .then(data => {
+                                    if (data.code === 200) {
+                                        alert("投票已删除");
+                                        window.location.href = "http://localhost:8888/home";
+                                    } else {
+                                        alert(data.message);
+                                    }
+                                });
+                        }
+                    });
+                }
 
                 //排序 根据vote count
                 voteOptionList.sort((a, b) => b.voteCount - a.voteCount);

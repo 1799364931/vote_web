@@ -3,53 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/vote_detail.css"/>
+    <link rel="stylesheet" href="/css/navigation_bar.css"/>
     <title>Title</title>
 </head>
 <body>
-
+<!--顶部导航栏-->
 <nav class="navbar">
-    <div class="navbar-container"></div>
-    <ul class="nav-links">
-        <li class="entry-wrapper">
-            <a href="http://localhost:8888/home">首页</a>
-        </li>
-        <li class="entry-wrapper">
-            <a href="http://localhost:8888/create">创建投票</a>
-        </li>
-        <li class="entry-wrapper">
-            <a href="#">我的投票</a>
-        </li>
-        <li class="entry-wrapper">
-            <a href="#">个人中心</a>
-        </li>
-    </ul>
-    <div class="search-container">
-        <input type="text" placeholder="搜索投票..."/>
-        <button onclick="searchVote()">
-            搜索
-        </button>
-    </div>
-    <div class="user-profile">
-        <a href="">
-            <img src="learn/test.JPG" alt="用户头像" width="40" height="40"/>
-        </a>
-    </div>
 </nav>
-
+<script>
+    fetch("/bar.html")
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector('.navbar').innerHTML = html;
+        })
+        .catch(error => {
+            console.error("Error loading navigation bar:", error);
+        });
+</script>
 <div class="vote-intro-container" id="vote-intro-container">
     <div class = "vote-intro-text-wrapper" id = "vote-intro-text-wrapper">
     <h2 class="vote-title" id="vote-title">投票标题</h2>
     <hr>
     <p class="vote-description" id="vote-description">投票描述</p>
     </div>
-<!--    <div class="vote-limit-wrapper" id="vote-limit-wrapper">-->
-<!--        <ul class="vote-limit-list" id="vote-limit-list">-->
-<!--            <li class="vote-limit-item" id="vote-limit-item">-->
-<!--                &lt;!&ndash; 显示每一类可以投多少票 &ndash;&gt;-->
-<!--                <p>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </div>-->
     <div class = "vote-time-wrapper" id="vote-time-wrapper">
         <ul class="vote-time-list" id="vote-time-list">
             <li class="vote-time-item" id="vote-start-time-item">
@@ -87,6 +63,11 @@
     </div>
 </div>
 
+<div class="delete-vote-container" id="delete-vote-container">
+    <button class="delete-vote-button" id="delete-vote-button">删除投票</button>
+</div>
+
 <script src="/js/vote_detail.js"></script>
+<script src="/js/navigation_bar.js"></script>
 </body>
 </html>

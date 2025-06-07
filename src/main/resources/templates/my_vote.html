@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="">
+<head>
+  <meta charset="UTF-8">
+  <title>我的投票</title>
+  <link rel="stylesheet" href="/css/home.css"/>
+  <link rel="stylesheet" href="/css/navigation_bar.css"/>
+</head>
+<body>
+<!--顶部导航栏-->
+<nav class="navbar">
+</nav>
+<script>
+  fetch("/bar.html")
+          .then(response => response.text())
+          .then(html => {
+            document.querySelector('.navbar').innerHTML = html;
+          })
+          .catch(error => {
+            console.error("Error loading navigation bar:", error);
+          });
+</script>
+<!--显示投票-->
+<div class = "vote-container" id = "vote-container">
+  <ul class = "vote-list" id = "vote-list">
+    <li class = "vote-item" id = "vote-item">
+
+    </li>
+  </ul>
+</div>
+<script src = "/js/my_vote.js"></script>
+<script src="/js/navigation_bar.js"></script>
+</body>
+</html>

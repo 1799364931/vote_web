@@ -5,6 +5,7 @@ import com.example.database_system.pojo.user.User;
 import com.example.database_system.pojo.vote.option.VoteOption;
 import jakarta.persistence.*;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Table(name = "tb_vote_option_record",indexes = {
@@ -28,6 +29,17 @@ public class VoteOptionRecord {
     @ManyToOne
     @JoinColumn(name = "ticket_id")
     private Ticket ticket;
+
+    @Column(name = "time")
+    private Timestamp time;
+
+    public Timestamp getTime() {
+        return time;
+    }
+
+    public void setTime(Timestamp time) {
+        this.time = time;
+    }
 
     public UUID getId() {
         return id;

@@ -80,7 +80,6 @@ document.addEventListener("DOMContentLoaded", function () {
                           <span id="${ticket.ticketId}value">1</span>
                     `;
                     voteLimitList.appendChild(ticketItem);
-
                 });
             }
         })
@@ -150,7 +149,6 @@ async function getOptionalList() {
                 const data = await response.json();
                 if (data.code === 200) {
                     imageUrl = data.data.resourceUrl;
-                    alert("图像上传成功！" + imageUrl);
                 } else {
                     console.error("上传图像失败:", data.message);
                 }
@@ -233,7 +231,6 @@ document.getElementById("submit-vote-btn").addEventListener("click", async funct
         .then(data => {
             if (data.code === 200) {
                 alert("投票创建成功！");
-                alert(data.data);
                 window.location.href = "/vote/" + data.data; // 跳转到新创建的投票详情页
             } else {
                 alert("创建投票失败: " + data.message);

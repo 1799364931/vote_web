@@ -94,6 +94,7 @@ public class VoteService {
                 OptionResource optionResource = new OptionResource();
                 optionResource.setUrl(voteOptionDto.getResourceUrl());
                 optionResource.setVoteOption(newVoteOption);
+                optionResource.setType("image"); // 默认类型为图片
                 optionResourceRepository.save(optionResource);
             }
         }
@@ -124,6 +125,9 @@ public class VoteService {
         List<VoteDto> voteDtoList = new ArrayList<>();
         List<Vote> voteList = voteRepository.findAll();
         for( Vote vote : voteList) {
+            if(vote.getDelete()) {
+                continue;
+            }
             voteDtoList.add(new VoteDto(vote));
         }
         return ResponseMessage.success(voteDtoList, "success");
@@ -150,8 +154,9 @@ public class VoteService {
             return ResponseMessage.error(voteDto, "user can not delete this vote", HttpStatus.UNAUTHORIZED.value());
         }
 
+        vote.get().setDelete(true);
         //删除
-        voteRepository.delete(vote.get());
+        voteRepository.save(vote.get());
         //新建一条log
         VoteDefineLog voteDefineLog = new VoteDefineLog("DELETE", new Timestamp(System.currentTimeMillis()), user.get(), vote.get());
         voteDefineLogRepository.save(voteDefineLog);
@@ -185,8 +190,6 @@ public class VoteService {
             }
         }
 
-
-
         // limitDto 的票数是剩余可投票数
         //如果用户未登录
         if(userId == null){
@@ -194,6 +197,7 @@ public class VoteService {
                 TicketLimitDto ticketLimitDto = new TicketLimitDto(ticketLimit);
                 ticketLimitDtoList.add(ticketLimitDto);
             }
+            voteDetailDto.setOwner(false);
         }
         else{
             //如果用户登录了
@@ -201,6 +205,8 @@ public class VoteService {
             if (user.isEmpty()) {
                 return ResponseMessage.error(null, "user not exist", HttpStatus.BAD_REQUEST.value());
             }
+            //判断是否是创建者
+            voteDetailDto.setOwner(user.get().getId() == vote.get().getCreatorId().getId() || user.get().getRole() == 0);
             for (var ticketLimit : vote.get().getTicketLimits()) {
                 TicketLimitDto ticketLimitDto = new TicketLimitDto(ticketLimit);
                 //获取当前用户在当前投票中投的所有票
@@ -240,6 +246,13 @@ public class VoteService {
         if (user.isEmpty() || vote.isEmpty() || voteOption.isEmpty() || ticket.isEmpty()) {
             return ResponseMessage.error(null, "Something not exist", HttpStatus.BAD_REQUEST.value());
         }
+        //查看投票是否结束 or 开始
+        if(vote.get().getStartTime().after(new Timestamp(System.currentTimeMillis()))
+        ||vote.get().getEndTime().before(new Timestamp(System.currentTimeMillis()))){
+            return ResponseMessage.error(null,"not in vote time",HttpStatus.BAD_REQUEST.value());
+        }
+
+
         //查看当前用户是否允许投票
         //统计当前用户在当前投票中投的所有票 (如果该用户的投票达到了投票上限就不再允许投票
         var statisticUserVoteRecordCountGroupByTicketRes = voteRecordRepository.findByUserAndVoteAndTicket(
@@ -266,6 +279,7 @@ public class VoteService {
         voteOptionRecord.setVoteOption(voteOption.get());
         voteOptionRecord.setTicket(ticket.get());
         voteOptionRecord.setVoter(user.get());
+        voteOptionRecord.setTime(new Timestamp(System.currentTimeMillis()));
 
         voteOption.get().addVoteCount(ticket.get().getWeight());
         //记录投票
@@ -304,11 +318,29 @@ public class VoteService {
         List<Vote> voteList = voteRepository.findByTitleContainingOrDescriptionContaining(keyword, keyword);
         List<VoteDto> voteDtoList = new ArrayList<>();
         for (Vote vote : voteList) {
+            if(vote.getDelete()) {
+                continue; //如果是删除的投票就不显示
+            }
             voteDtoList.add(new VoteDto(vote));
         }
         return ResponseMessage.success(voteDtoList, "Search success");
     }
 
-    //获取剩余可投票数
+    //根据用户ID获取用户创建的投票信息
+    public ResponseMessage<List<VoteDto>> getVoteByUser(UUID userId) {
+        var user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            return ResponseMessage.error(null, "user not exist", HttpStatus.BAD_REQUEST.value());
+        }
+        List<Vote> voteList = voteRepository.findByCreatorId(user.get());
+        List<VoteDto> voteDtoList = new ArrayList<>();
+        for (Vote vote : voteList) {
+            if(vote.getDelete()) {
+                continue; //如果是删除的投票就不显示
+            }
+            voteDtoList.add(new VoteDto(vote));
+        }
+        return ResponseMessage.success(voteDtoList, "Get user's votes success");
+    }
 }
 
