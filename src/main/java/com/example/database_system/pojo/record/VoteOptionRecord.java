@@ -9,28 +9,28 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 @Table(name = "tb_vote_option_record",indexes = {
-        @Index(name = "idx_user_vote",columnList = "voter_id , vote_option_id")
+        @Index(name = "idx_user_vote",columnList = "voter_id")
 })
 @Entity
 public class VoteOptionRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column(name = "id",nullable = false)
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "voter_id")
+    @JoinColumn(name = "voter_id",nullable = false)
     private User voter;
 
     @ManyToOne
-    @JoinColumn(name = "vote_option_id")
+    @JoinColumn(name = "vote_option_id",nullable = false)
     private VoteOption voteOption;
 
     @ManyToOne
-    @JoinColumn(name = "ticket_id")
+    @JoinColumn(name = "ticket_id",nullable = false)
     private Ticket ticket;
 
-    @Column(name = "time")
+    @Column(name = "time",nullable = false)
     private Timestamp time;
 
     public Timestamp getTime() {

@@ -13,13 +13,13 @@ import java.util.UUID;
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column(name = "id",nullable = false)
     private UUID id;
 
-    @Column(name = "description")
+    @Column(name = "description",nullable = false)
     private String description;
 
-    @Column(name = "weight")
+    @Column(name = "weight",nullable = false)
     private Integer weight;
 
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)

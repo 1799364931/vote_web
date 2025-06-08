@@ -1,16 +1,18 @@
 package com.example.database_system.pojo.user;
 
 import com.example.database_system.pojo.vote.Vote;
-import com.example.database_system.pojo.record.VoteDefineLog;
+import com.example.database_system.pojo.record.VoteDefineRecord;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Table(name = "tb_user",indexes = {
-        @Index(name = "account",columnList = "account")
-})
+@Table(name = "tb_user",
+    indexes = {
+            @Index(name = "account", columnList = "account")
+    })
 @Entity
 public class User {
     @Id
@@ -23,14 +25,15 @@ public class User {
     private String name;
     @Column(name = "password",nullable = false)
     private String password;
-    @Column(name = "role")
-    private Integer role;
+    @Column(name = "role",nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToMany(mappedBy = "creatorId")
     private List<Vote> votes= new ArrayList<>(); ;
 
     @OneToMany(mappedBy = "operator")
-    private List<VoteDefineLog> voteDefineLogs = new ArrayList<>(); ;
+    private List<VoteDefineRecord> voteDefineRecords = new ArrayList<>(); ;
 
     public User(){
         this.name = "default_name";
@@ -52,12 +55,12 @@ public class User {
         this.votes = votes;
     }
 
-    public List<VoteDefineLog> getVoteDefineLogs() {
-        return voteDefineLogs;
+    public List<VoteDefineRecord> getVoteDefineLogs() {
+        return voteDefineRecords;
     }
 
-    public void setVoteDefineLogs(List<VoteDefineLog> voteDefineLogs) {
-        this.voteDefineLogs = voteDefineLogs;
+    public void setVoteDefineLogs(List<VoteDefineRecord> voteDefineRecords) {
+        this.voteDefineRecords = voteDefineRecords;
     }
 
     public UUID getId() {
@@ -84,13 +87,18 @@ public class User {
         this.password = password;
     }
 
-    public Integer getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(Integer role) {
+    public void setRole(Role role) {
         this.role = role;
     }
+
+    public Boolean isAdmin() {
+        return this.role == Role.ADMIN;
+    }
+
 }
 
 

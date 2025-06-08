@@ -1,12 +1,13 @@
 package com.example.database_system.pojo.dto.user;
 
+import com.example.database_system.pojo.user.Role;
 import com.example.database_system.pojo.user.User;
 
 public class LoginRegisterUserDto {
 
     private String account;
     private String password;
-    private Integer role;
+    private Role role;
     private String token;
 
     public LoginRegisterUserDto() {
@@ -42,11 +43,11 @@ public class LoginRegisterUserDto {
         this.password = password;
     }
 
-    public Integer getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(Integer role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 }

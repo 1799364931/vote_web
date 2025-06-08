@@ -6,6 +6,7 @@ import com.example.database_system.pojo.dto.ticket.TicketDto;
 import com.example.database_system.pojo.response.ResponseMessage;
 import com.example.database_system.repository.record.VoteOptionRecordRepository;
 import com.example.database_system.repository.vote.VoteOptionRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class VoteRecordService {
         this.voteOptionRecordRepository = voteOptionRecordRepository;
     }
 
+    //此处不需要@Transactional注解，因为只进行了一次数据库查询操作
     public ResponseMessage<List<VoteRecordDto>> getVoteLog(UUID userId) {
         List<VoteRecordDto> voteRecordDtoList = new ArrayList<>();
         var voteRecords = voteOptionRecordRepository.findByUserId(userId);

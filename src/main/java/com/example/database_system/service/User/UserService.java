@@ -3,6 +3,7 @@ package com.example.database_system.service.User;
 import com.example.database_system.pojo.dto.user.UserDto;
 import com.example.database_system.pojo.response.ResponseMessage;
 import com.example.database_system.repository.user.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

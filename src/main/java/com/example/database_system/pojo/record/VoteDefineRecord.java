@@ -8,16 +8,16 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-@Table (name = "tb_vote_define_manager")
+@Table (name = "tb_vote_define_record")
 @Entity
-public class VoteDefineLog {
+public class VoteDefineRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column(name = "id",nullable = false)
     private UUID id;
-    @Column(name = "operation")
+    @Column(name = "operation",nullable = false)
     private String operation;
-    @Column(name = "time")
+    @Column(name = "time",nullable = false)
     private Timestamp time;
 
     @ManyToOne
@@ -27,14 +27,14 @@ public class VoteDefineLog {
     @JoinColumn(name = "vote_id")
     private Vote vote;
 
-    public VoteDefineLog(String operation, Timestamp time, User operator, Vote vote) {
+    public VoteDefineRecord(String operation, Timestamp time, User operator, Vote vote) {
         this.operation = operation;
         this.time = time;
         this.operator = operator;
         this.vote = vote;
     }
 
-    public VoteDefineLog() {
+    public VoteDefineRecord() {
     }
 
 

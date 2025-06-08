@@ -16,20 +16,20 @@ public class VoteRecord {
 
     @ManyToOne
     @MapsId("userId")
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id",nullable = false)
     private User user;
 
     @ManyToOne
     @MapsId("voteId")
-    @JoinColumn(name = "vote_id")
+    @JoinColumn(name = "vote_id",nullable = false)
     private Vote vote;
 
     @ManyToOne
     @MapsId("ticketId")
-    @JoinColumn(name = "ticket_id")
+    @JoinColumn(name = "ticket_id",nullable = false)
     private Ticket ticket;
 
-    @Column(name = "vote_count")
+    @Column(name = "vote_count",nullable = false)
     private Integer voteCount;
 
     public VoteRecordId getVoteId() {

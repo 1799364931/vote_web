@@ -1,11 +1,12 @@
 package com.example.database_system.pojo.dto.user;
 
+import com.example.database_system.pojo.user.Role;
 import com.example.database_system.pojo.user.User;
 
 public class UserDto {
     private String account;
     private String name;
-    private Integer role;
+    private Role role;
 
     public UserDto() {
     }
@@ -32,11 +33,11 @@ public class UserDto {
         this.name = name;
     }
 
-    public Integer getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(Integer role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 }

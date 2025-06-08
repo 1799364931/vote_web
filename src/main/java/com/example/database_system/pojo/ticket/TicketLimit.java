@@ -12,18 +12,18 @@ import java.util.UUID;
 public class TicketLimit {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column(name = "id",nullable = false)
     private UUID id;
 
-    @Column(name = "count")
+    @Column(name = "count",nullable = false)
     private Integer count;
 
     @ManyToOne
-    @JoinColumn(name = "vote_id")
+    @JoinColumn(name = "vote_id",nullable = false)
     private Vote vote;
 
     @ManyToOne
-    @JoinColumn(name = "ticket_id")
+    @JoinColumn(name = "ticket_id",nullable = false)
     private Ticket ticket;
     public Integer getCount() {
         return count;

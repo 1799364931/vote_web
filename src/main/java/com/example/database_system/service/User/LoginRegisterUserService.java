@@ -7,6 +7,7 @@ import com.example.database_system.pojo.response.ResponseMessage;
 import com.example.database_system.pojo.dto.user.LoginRegisterUserDto;
 import com.example.database_system.pojo.user.User;
 import com.example.database_system.repository.user.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,18 +15,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginRegisterUserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final  SecurityConfig securityConfig;
+    private final  JwtUtils jwtUtils;
 
     @Autowired
-    SecurityConfig securityConfig;
+    public LoginRegisterUserService(UserRepository userRepository, SecurityConfig securityConfig, JwtUtils jwtUtils) {
+        this.userRepository = userRepository;
+        this.securityConfig = securityConfig;
+        this.jwtUtils = jwtUtils;
+    }
 
-    @Autowired
-    JwtUtils jwtUtils;
-
-
-
-
+    @Transactional
     public ResponseMessage<LoginRegisterUserDto> RegisterUser(LoginRegisterUserDto loginRegisterUserDto) {
         var user = new User();
         user.setAccount(loginRegisterUserDto.getAccount());
@@ -40,6 +41,7 @@ public class LoginRegisterUserService {
             return ResponseMessage.success(loginRegisterUserDto, "注册成功，请登录");
         }
     }
+
 
     public ResponseMessage<LoginRegisterUserDto> LoginUser(LoginRegisterUserDto loginRegisterUserDto) {
         var user = new User();

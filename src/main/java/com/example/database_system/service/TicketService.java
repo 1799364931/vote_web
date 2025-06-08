@@ -10,6 +10,7 @@ import com.example.database_system.repository.user.UserRepository;
 import com.example.database_system.repository.vote.VoteRepository;
 import com.example.database_system.repository.record.VoteOptionRecordRepository;
 import com.example.database_system.repository.record.VoteRecordRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,6 @@ public class TicketService {
     public ResponseMessage<List<TicketLimitDto>> getVoteTickets(UUID userId,UUID voteId){
         var vote = voteRepository.findById(voteId);
         var user = userRepository.findById(userId);
-
         if(vote.isEmpty() || user.isEmpty()) {
             return ResponseMessage.error(new ArrayList<>(), "vote or user not found", HttpStatus.NOT_FOUND.value());
         }

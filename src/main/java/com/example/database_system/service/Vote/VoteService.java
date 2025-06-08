@@ -5,7 +5,7 @@ import com.example.database_system.pojo.dto.ticket.TicketLimitDto;
 import com.example.database_system.pojo.dto.user.UserDto;
 import com.example.database_system.pojo.dto.vote.VoteDetailDto;
 import com.example.database_system.pojo.dto.vote.VoteDto;
-import com.example.database_system.pojo.record.VoteDefineLog;
+import com.example.database_system.pojo.record.VoteDefineRecord;
 import com.example.database_system.pojo.record.VoteOptionRecord;
 import com.example.database_system.pojo.record.VoteRecord;
 import com.example.database_system.pojo.record.VoteRecordId;
@@ -23,6 +23,7 @@ import com.example.database_system.repository.vote.VoteRepository;
 import com.example.database_system.repository.record.VoteDefineLogRepository;
 import com.example.database_system.repository.record.VoteOptionRecordRepository;
 import com.example.database_system.repository.record.VoteRecordRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,7 @@ public class VoteService {
     }
 
     //创建投票
+    @Transactional
     public ResponseMessage<UUID> createVote(List<VoteOptionDto> voteOptionDtoList, VoteDto voteDto, UUID userId, List<TicketLimitDto> ticketLimitDtoList) {
         if (voteOptionDtoList.isEmpty()) {
             return ResponseMessage.error(null, "Empty vote options", HttpStatus.BAD_REQUEST.value());
@@ -115,8 +117,8 @@ public class VoteService {
         }
 
         //新增一条log
-        VoteDefineLog voteDefineLog = new VoteDefineLog("CREATE", new Timestamp(System.currentTimeMillis()), creator.get(), newVote);
-        voteDefineLogRepository.save(voteDefineLog);
+        VoteDefineRecord voteDefineRecord = new VoteDefineRecord("CREATE", new Timestamp(System.currentTimeMillis()), creator.get(), newVote);
+        voteDefineLogRepository.save(voteDefineRecord);
         return ResponseMessage.success(newVote.getId(), "Create vote success");
     }
 
@@ -134,6 +136,7 @@ public class VoteService {
     }
 
     //删除当前的投票
+    @Transactional
     public ResponseMessage<VoteDto> deleteVote(UUID voteId, UUID userId) {
 
         //查看表是否存在
@@ -149,7 +152,7 @@ public class VoteService {
         }
 
         //判断是否是创建者或者管理者 否则无权删除
-        if (user.get().getRole() == 0 && user.get().getId() != vote.get().getCreatorId().getId()) {
+        if (user.get().isAdmin() && user.get().getId() != vote.get().getCreatorId().getId()) {
             //无法删除
             return ResponseMessage.error(voteDto, "user can not delete this vote", HttpStatus.UNAUTHORIZED.value());
         }
@@ -158,8 +161,8 @@ public class VoteService {
         //删除
         voteRepository.save(vote.get());
         //新建一条log
-        VoteDefineLog voteDefineLog = new VoteDefineLog("DELETE", new Timestamp(System.currentTimeMillis()), user.get(), vote.get());
-        voteDefineLogRepository.save(voteDefineLog);
+        VoteDefineRecord voteDefineRecord = new VoteDefineRecord("DELETE", new Timestamp(System.currentTimeMillis()), user.get(), vote.get());
+        voteDefineLogRepository.save(voteDefineRecord);
 
         return ResponseMessage.success(voteDto, "Delete success");
 
@@ -206,7 +209,7 @@ public class VoteService {
                 return ResponseMessage.error(null, "user not exist", HttpStatus.BAD_REQUEST.value());
             }
             //判断是否是创建者
-            voteDetailDto.setOwner(user.get().getId() == vote.get().getCreatorId().getId() || user.get().getRole() == 0);
+            voteDetailDto.setOwner(user.get().getId() == vote.get().getCreatorId().getId() || user.get().isAdmin());
             for (var ticketLimit : vote.get().getTicketLimits()) {
                 TicketLimitDto ticketLimitDto = new TicketLimitDto(ticketLimit);
                 //获取当前用户在当前投票中投的所有票
@@ -237,6 +240,7 @@ public class VoteService {
     }
 
     //为某个投票选项投票
+    @Transactional
     public ResponseMessage<Integer> voteFor(UUID voteId, UUID voteOptionId, UUID userId, UUID ticketId) {
         //查看投票的东西是否存在
         var user = userRepository.findById(userId);

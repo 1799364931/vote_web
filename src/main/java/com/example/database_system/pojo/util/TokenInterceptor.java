@@ -13,8 +13,12 @@ import java.io.IOException;
 
 @Component
 public class TokenInterceptor implements HandlerInterceptor {
+    private final JwtUtils jwtUtils;
+
     @Autowired
-    JwtUtils jwtUtils;
+    public TokenInterceptor(JwtUtils jwtUtils) {
+        this.jwtUtils = jwtUtils;
+    }
 
     //拦截器 拦截过期token
     @NonNull

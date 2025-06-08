@@ -2,7 +2,7 @@ package com.example.database_system.pojo.vote;
 
 import com.example.database_system.pojo.record.VoteRecord;
 import com.example.database_system.pojo.ticket.TicketLimit;
-import com.example.database_system.pojo.record.VoteDefineLog;
+import com.example.database_system.pojo.record.VoteDefineRecord;
 import com.example.database_system.pojo.user.User;
 import com.example.database_system.pojo.vote.option.VoteOption;
 import jakarta.persistence.*;
@@ -17,26 +17,26 @@ import java.util.UUID;
 public class Vote {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column(name = "id",nullable = false)
     private UUID id;
     @Column(name = "title",nullable = false)
     private String title;
     @Column(name = "description",nullable = false)
     private String description;
-    @Column(name = "start_time")
+    @Column(name = "start_time",nullable = false)
     private Timestamp startTime;
-    @Column(name = "end_time")
+    @Column(name = "end_time",nullable = false)
     private Timestamp endTime;
 
-    @Column(name = "is_delete")
+    @Column(name = "is_delete",nullable = false)
     private Boolean delete = false;
 
     @ManyToOne
-    @JoinColumn(name = "creator_id")
+    @JoinColumn(name = "creator_id",nullable = false)
     private User creatorId;
 
     @OneToMany(mappedBy = "vote")
-    private List<VoteDefineLog> voteDefineLogs = new ArrayList<>();
+    private List<VoteDefineRecord> voteDefineRecords = new ArrayList<>();
 
     @OneToMany(mappedBy = "vote",cascade = CascadeType.ALL)
     private List<VoteOption> voteOptions = new ArrayList<>();
@@ -112,12 +112,12 @@ public class Vote {
         this.creatorId = creatorId;
     }
 
-    public List<VoteDefineLog> getVoteDefineLogs() {
-        return voteDefineLogs;
+    public List<VoteDefineRecord> getVoteDefineLogs() {
+        return voteDefineRecords;
     }
 
-    public void setVoteDefineLogs(List<VoteDefineLog> voteDefineLogs) {
-        this.voteDefineLogs = voteDefineLogs;
+    public void setVoteDefineLogs(List<VoteDefineRecord> voteDefineRecords) {
+        this.voteDefineRecords = voteDefineRecords;
     }
 
     public List<VoteOption> getVoteOptions() {
