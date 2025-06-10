@@ -59,15 +59,19 @@
 
 ## 3 系统设计
 
-### 3.1 数据库设计
+### 3.1 系统架构设计
+本项目采用前后端分离的``B/S``架构，前端使用``HTML + CSS + JavaScript``实现，后端使用``Spring Boot``框架。
+数据库使用``MySQL``存储用户信息和投票数据，并且在后端利用``Spring Data JPA``进行数据访问。
+![img_14.png](img_14.png)
 
-#### 3.1.1 实体关系模型(E-R图)
+### 3.2 数据库设计
+#### 3.2.1 实体关系模型(E-R图)
 根据上述需求分析，设计以下实体关系模型(E-R图)：
 ![img_1.png](img_1.png)
-#### 3.1.2 数据库表结构设计
+#### 3.2.2 数据库表结构设计
 根据上述的需求分析，与E-R图设计，设计以下数据库表结构：
 
-##### 3.1.2.1 用户表(tb_user)
+##### 3.2.2.1 用户表(tb_user)
 根据需求分析，可以设计用户表以存储对应的数据信息
 + 用户注册登录需求：
     + 用户名、密码信息
@@ -90,7 +94,7 @@ create table if not exists vote_system.tb_user
 );
 ```
 
-##### 3.1.2.2 投票表(tb_vote)
+##### 3.2.2.2 投票表(tb_vote)
 根据需求分析，可以设计投票表以存储对应的数据信息
 + 投票创建与检索需求：
     + 投票标题、描述、选项等信息
@@ -113,7 +117,7 @@ create table if not exists vote_system.tb_vote
         foreign key (creator_id) references vote_system.tb_user (id)
 );
 ```
-##### 3.1.2.3 投票选项表(tb_vote_option)
+##### 3.2.2.3 投票选项表(tb_vote_option)
 根据需求分析，可以设计投票选项表以存储对应的数据信息
 + 投票创建与检索需求：
     + 投票选项内容，包含文字和图片信息
@@ -134,7 +138,7 @@ create table if not exists vote_system.tb_vote_option
 );
 ```
 
-##### 3.1.2.4 投票记录表(tb_vote_record)
+##### 3.2.2.4 投票记录表(tb_vote_record)
 根据需求分析，可以设计投票记录表以存储对应的数据信息
 + 用户投票记录需求：
     + 用户参与的投票记录
@@ -161,7 +165,7 @@ create table if not exists vote_system.tb_vote_option_record
 );
 ```
 
-##### 3.1.2.5 投票票据表(tb_ticket)
+##### 3.2.2.5 投票票据表(tb_ticket)
 根据需求分析，可以设计投票票据表以存储对应的数据信息
 + 投票票据的多样化需求：
     + 投票票据的种类描述
@@ -177,7 +181,7 @@ create table if not exists vote_system.tb_ticket
 );
 ```
 
-##### 3.1.2.6 投票选项图片表(tb_option_resource)
+##### 3.2.2.6 投票选项图片表(tb_option_resource)
 根据需求分析，可以设计投票选项资源表来存储投票选项的对应资源信息
 + 投票选项的资源信息
     + 投票选项的资源定位
@@ -196,7 +200,7 @@ create table if not exists vote_system.tb_option_resource
 );
 ```
 
-##### 3.1.2.7 投票票据限制表(tb_ticket_limit)
+##### 3.2.2.7 投票票据限制表(tb_ticket_limit)
 根据需求分析，每个投票都需要限定用户可以投的票数，因此需要设计投票票据限制表来存储对应的数据信息
 + 投票票据的限制信息
     + 投票的可用票数
@@ -219,7 +223,7 @@ create table if not exists vote_system.tb_vote_limit
 );
 ```
 
-##### 3.1.2.8 投票记录表(tb_vote_record)
+##### 3.2.2.8 投票记录表(tb_vote_record)
 根据需求分析，可以设计投票记录表来存储用户的投票记录信息。
 此表是为了加速查询投票记录而设计的，如果利用投票选项表(tb_vote_option)和投票记录表(tb_vote_record)进行查询，
 联合与聚合操作会导致查询效率低下，因此设计此表来存储用户的投票记录信息。
@@ -249,7 +253,7 @@ create table if not exists vote_system.tb_vote_record
 );
 ```
 
-##### 3.1.2.9 投票定义记录表(tb_vote_define_record)
+##### 3.2.2.9 投票定义记录表(tb_vote_define_record)
 根据管理的需求分析，可以设计投票定义记录表来存储用户对投票的创建和修改记录信息。
 + 投票定义记录需求：
     + 投票的创建和修改记录
@@ -273,20 +277,20 @@ create table if not exists vote_system.tb_vote_define_record
 );
 ```
 
-#### 3.1.3 实体完整性与参照完整性设计
+#### 3.2.3 实体完整性与参照完整性设计
 
-##### 3.1.3.1 实体完整性
+##### 3.2.3.2 实体完整性
 根据上述的需求分析以及所实现的数据库表结构，可以看出每个表的主键都被设置为非空且唯一，因此满足实体完整性要求。
 
-##### 3.1.3.2 参照完整性
+##### 3.2.3.2 参照完整性
 上述的数据库表结构中，所有的外键都被设置为非空且引用了其他表的主键，因此满足参照完整性要求。
 同时，由于表``tb_vote_define_record``中的外键引用了表``tb_vote``的主键，所以在删除投票时，使用对应的删除标记，而非进行级联删除。
 
 
-#### 3.1.4 数据索引设计
+#### 3.2.4 数据索引设计
 为了加速查询操作，在常用的表结构中添加了索引。
 
-##### 3.1.4.1 用户表(tb_user)
+##### 3.2.4.1 用户表(tb_user)
 由于用户表(tb_user)中的账号字段(account)是唯一的，同时在注册时用户尚未分配ID，因此在账号字段上添加唯一索引，以加速用户登录和注册操作。
 ```sql
 create index account
@@ -294,48 +298,49 @@ create index account
 ```
 此索引可以加速用户相关操作，对用户的查询、登录和注册等操作提供了更快的响应速度。
 
-##### 3.1.4.2 投票限制表(tb_vote_limit)
+##### 3.2.4.2 投票限制表(tb_vote_limit)
 由于投票限制表(tb_vote_limit)中的投票ID(vote_id)和票据ID(ticket_id)是外键，并且在查询投票限制时需要根据投票ID和票据ID进行查询，因此在这两个字段上添加联合索引，以加速查询操作。
 ```sql
 create index idx_vote_ticket
     on vote_system.tb_vote_limit (vote_id, ticket_id);
 ```
 
-##### 3.1.4.3 投票选项资源表(tb_option_resource)
+##### 3.2.4.3 投票选项资源表(tb_option_resource)
 由于投票选项资源表(tb_option_resource)中的投票选项ID(vote_option_id)是外键，并且在查询投票选项资源时需要根据投票选项ID进行查询，因此在该字段上添加索引，以加速查询操作。
 ```sql
 create index idx_option_resource_vote_option_id
     on vote_system.tb_option_resource (vote_option_id);
 ```
 
-##### 3.1.4.4  投票选项记录表(tb_vote_option_record)
+##### 3.2.4.4  投票选项记录表(tb_vote_option_record)
 由于需要对用户所进行的投票记录进行展示，所以需要根据用户进行查询，因此在投票选项记录表(tb_vote_option_record)中的用户ID(voter_id)上添加索引，以加速查询操作。
 ```sql
 create index idx_user_vote
     on vote_system.tb_vote_option_record (voter_id);
 ```
 
-#### 3.1.5 事务设计
+#### 3.2.5 事务设计
 由于本项目是一个线上投票系统，涉及到用户注册、登录、投票等操作，因此需要设计事务来保证数据的一致性和完整性。
 对于如用户注册，投票创建，投票等涉及并发以及数据库删改操作的数据操作，则利用数据库的事务机制对相应的函数进行处理，以保证在数据操作过程中数据的一致性。
 
 在``Spring boot``中利用``@Transactional``注解来标记需要进行事务处理的方法，Spring会自动为这些方法创建事务，并在方法执行完毕后提交事务，如果方法执行过程中发生异常，则会回滚事务，保证数据的一致性。
 
-### 3.2 软件架构设计
-本项目采用前后端分离的B/S软件架构，后端由``spring boot``作为服务器框架，以``Mysql``数据库进行数据存储。同时前端采用``HTML``布局，``CSS``样式化，``JS``页面逻辑控制的实现。
+### 3.3 软件架构设计
+本项目采用前后端分离的B/S软件架构，后端由``spring boot``作为服务器框架，以``MySQL``数据库进行数据存储。同时前端采用``HTML``布局，``CSS``样式化，``JS``页面逻辑控制的实现。
 
-#### 3.2.1 前端页面设计
-项目前端采取``HTML + CSS + JS``的设计方式，利用``JS``控制页面逻辑，并且与后端接口进行交互，从而实现前端的数据获取和展示功能。
+#### 3.3.1 前端页面设计
+项目前端采取``HTML + CSS + Javascript``的设计方式，后端提供``@Controller``注解的接口供前端调用，前端通过``fetch``或``axios``等方式进行数据请求以实现页面数据的获取和显示。
 
-前端采取简单的``MVC``控制以获取对应的网页，并且设计简单的页面路由：
+前端页面主要由``MVCController.java``控制器进行控制，前端路由通过``Javascript``进行控制，前端主要有如下页面：
++ 登录注册页面 `/login`
++ 主页 `/home`
++ 创建投票页面 `/create`
++ 投票页面 `/vote/{voteId}`
++ 投票记录页面 `/user-detail`
++ 我的投票页面 `/my-vote`
++ 搜索结果页面 `/search/keyword/{keyword}`
 
-```
-localhost:8888{
-  
-}
-```
-
-#### 3.2.2 后端接口层设计
+#### 3.3.2 后端接口层设计
 本项目使用``Spring Boot``作为后端框架，提供``RESTful API``接口供前端调用。
 
 根据需求分析，将接口层分为
@@ -345,11 +350,11 @@ localhost:8888{
 + 投票记录相关接口
 + 其余功能接口(如文件URL获取、网页路由等)
 
-##### 3.2.2.1 用户相关接口
+##### 3.3.2.1 用户相关接口
 + 用户注册接口 `POST /register/api/register`
 + 用户登录接口 `POST /login/api/login`
 
-##### 3.2.2.2 投票相关接口
+##### 3.3.2.2 投票相关接口
 + 投票创建接口 `POST /vote/api/create`
 + 获取投票接口 `GET /vote/api/all-vote`
 + 删除投票接口 `DELETE /vote/api/delete/{voteId}`
@@ -358,14 +363,14 @@ localhost:8888{
 + 获取投票详情接口 `GET /vote-detail/api/vote={voteId}`
 + 提交投票接口 `POST /vote-detail/api/vote/vote={voteId}/vote-option={voteOptionId}/ticket={ticketId}`
 
-##### 3.2.2.3 票据相关接口
+##### 3.3.2.3 票据相关接口
 + 获取所有票据接口 `GET /ticket/api/get-all-ticket`
 + 获取当前用户可用票据接口 `GET /ticket/api/get-vote-tickets/{voteId}`
 
-##### 3.2.2.4 投票记录相关接口
+##### 3.3.2.4 投票记录相关接口
 + 获取用户投票记录接口 `GET /vote-log/api/get-vote-log`
 
-#### 3.2.3 后端服务层设计
+#### 3.3.3 后端服务层设计
 后端服务层主要负责业务逻辑的处理，调用数据访问层进行数据的增删改查操作。
 根据上述接口，将服务层分为
 + 用户服务层
@@ -400,15 +405,6 @@ public ResponseMessage<LoginRegisterUserDto> RegisterUser(LoginRegisterUserDto l
 }
 ```
 
-```sql
-insert 
-into
-    tb_user
-    (account, name, password, role, id) 
-values
-    (kotori, kotori, $2a$10$I9G8Fc9/21Csi2WSWKXXi.OMgEa.GnxJBAs60tTwZz13TMJz52n3e, USER, ccb873da-03e9-427f-9253-2560fd65f528);
-```
-
 #### 4.1.2 用户登录
 ```java
 public ResponseMessage<LoginRegisterUserDto> LoginUser(LoginRegisterUserDto loginRegisterUserDto) {
@@ -429,18 +425,6 @@ public ResponseMessage<LoginRegisterUserDto> LoginUser(LoginRegisterUserDto logi
         return ResponseMessage.error(loginRegisterUserDto, "账户名不存在", HttpStatus.BAD_REQUEST.value());
     }
 }
-```
-```sql
-select
-    u1_0.id,
-    u1_0.account,
-    u1_0.name,
-    u1_0.password,
-    u1_0.role 
-from
-    tb_user u1_0 
-where
-    u1_0.id=kotori;
 ```
 
 #### 4.1.3 创建投票
@@ -503,47 +487,6 @@ public ResponseMessage<UUID> createVote(List<VoteOptionDto> voteOptionDtoList, V
 }
 ```
 
-```sql
-start transaction;
-
-# 新建投票
-insert
-into
-  tb_vote
-  (creator_id, is_delete, description, end_time, start_time, title, id)
-values
-  (ccb873da-03e9-427f-9253-2560fd65f528, false, 选择你喜欢的书籍进行投票吧！, 2025-06-12 01:01:00.0, 2025-06-10 11:56:00.0, 书籍投票, 812d1268-3389-428f-8d9e-3546f546a03c)
-
-# 插入投票选项
-insert
-into
-  tb_vote_option
-  (description, position, vote_id, vote_count, id)
-values
-  (巴黎圣母院, 1, 812d1268-3389-428f-8d9e-3546f546a03c, 0, e60aff5a-e445-4379-98af-35afa6d971ea);
-
-# 省略其他选项
-
-# 插入投票限制
-insert
-into
-  tb_vote_limit
-  (count, ticket_id, vote_id, id)
-values
-  (1, 31000000-0000-0000-0000-000000000000, 812d1268-3389-428f-8d9e-3546f546a03c, 767067a8-8a1e-4e23-8ca6-d46349682be3);
-
-#省略其他票限制
-
-# 插入投票定义记录
-insert
-into
-  tb_vote_define_record
-  (operation, user_id, time, vote_id, id)
-values
-  (CREATE, ccb873da-03e9-427f-9253-2560fd65f528, 2025-06-10 11:57:40.317, 812d1268-3389-428f-8d9e-3546f546a03c, dbe4e8c0-b607-462e-b244-bb7ed8cfc9b0);
-
-commit;
-```
 
 #### 4.1.4 用户投票
 ```java
@@ -617,8 +560,98 @@ public ResponseMessage<Integer> voteFor(UUID voteId, UUID voteOptionId, UUID use
 #### 5.1.5 投票记录页面
 ![img_7.png](img_7.png)
 
-### 5.2 接口功能展示
+### 5.2 数据库相关操作展示
 
-### 5.3 数据库相关操作展示
+#### 5.2.1 数据插入
+由于本系统的投票票种类是固定的，因此在数据库中预先插入了以下的票种类：
+```sql
+insert into tb_ticket (id, description, weight) values (1, '喜欢(1)', 1);
+insert into tb_ticket (id, description, weight) values (2, '十分喜欢(2)', 2);
+insert into tb_ticket (id, description, weight) values (3, '神中神(3)', 3);
+```
+#### 5.2.2 数据查询
++ 查询某个用户在某个投票中所进行的投票记录
+```sql
+select * from 
+tb_vote_option_record 
+  join tb_user 
+where 
+  tb_user.id = tb_vote_option_record.voter_id 
+  and 
+  tb_user.name = "kotori";
+```
+![img_8.png](img_8.png)
 
++ 查询在某个投票中，用户某个票种类投票的排行
+```sql
+select B.account,count(*) AS cnt 
+from tb_vote_option_record as A 
+    join tb_user as B on A.voter_id = B.id 
+    join tb_ticket as C on A.ticket_id = C.id 
+where C.description = "喜欢(1)" 
+group by B.account order by cnt;
+```
+![img_11.png](img_11.png)
+
++ 查询某个用户的密码(哈希后的密码)
+```sql
+select password from tb_user where account = "kotori";
+```
+![img_12.png](img_12.png)
++ 查询包含某个关键字的投票
+```sql
+select * from tb_vote where title like "%书籍%";
+```
+![img_13.png](img_13.png)
+
++ 新建某个投票的事务操作
+```sql
+start transaction;
+
+# 新建投票
+insert
+into
+  tb_vote
+  (creator_id, is_delete, description, end_time, start_time, title, id)
+values
+  ("ccb873da-03e9-427f-9253-2560fd65f528", false, "选择你喜欢的书籍进行投票吧！", "2025-06-12 01:01:00.0", "2025-06-10 11:56:00.0", "书籍投票", "812d1268-3389-428f-8d9e-3546f546a03c");
+
+# 插入投票选项
+insert
+into
+  tb_vote_option
+  (description, position, vote_id, vote_count, id)
+values
+  ("巴黎圣母院", "1", "812d1268-3389-428f-8d9e-3546f546a03c", 0,"e60aff5a-e445-4379-98af-35afa6d971ea");
+
+# 省略其他选项
+
+# 插入投票限制
+insert
+into
+  tb_vote_limit
+  (count, ticket_id, vote_id, id)
+values
+  (1, "31000000-0000-0000-0000-000000000000"," 812d1268-3389-428f-8d9e-3546f546a03c", "767067a8-8a1e-4e23-8ca6-d46349682be3");
+
+# 省略其他票限制
+
+# 插入投票定义记录
+insert
+into
+  tb_vote_define_record
+  (operation, user_id, time, vote_id, id)
+values
+  ("CREATE", "ccb873da-03e9-427f-9253-2560fd65f528", "2025-06-10 11:57:40.317"," 812d1268-3389-428f-8d9e-3546f546a03c", "dbe4e8c0-b607-462e-b244-bb7ed8cfc9b0");
+
+commit;
+```
 ## 6 总结
+
+在本项目中，实现了一个基于B/S架构的在线投票系统，主要功能包括用户注册登录、投票创建与检索、投票数据存储与统计、用户访问控制、用户身份验证以及友好的用户界面可视化。
+
+系统设计方面，从系统整体架构出发，选用了前后端分离的B/S架构，前端使用HTML、CSS和JavaScript实现，后端使用Spring Boot框架，数据库使用MySQL进行数据存储。
+
+在数据库设计方面，从实体关系图出发，根据需求分析，设计了用户表、投票表、投票选项表、投票记录表等多个表。
+同时设计时考虑实体完整性和参照完整性，确保数据的一致性和完整性；为提高查询效率，在常用的查询字段上添加了索引；
+且为了投票系统的稳定性与并发性，在数据操作中使用了事务机制，确保数据操作的原子性。
