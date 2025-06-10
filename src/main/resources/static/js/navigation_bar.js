@@ -7,8 +7,22 @@ function logout(){
     if(!confirm("确定要退出登录吗？")){
         return;
     }
-    localStorage.removeItem("token");
-    window.location.href = "http://localhost:8888/login";
+    fetch("http://localhost:8888/login/api/logout", {
+        method: "POST",
+        headers:{
+            "Content-Type": "application/json",
+            "authorization": "Bearer " + localStorage.getItem("token"),
+        }
+    }).then(response => response.json())
+        .then(data => {
+            if(data.code === 200){
+                localStorage.removeItem("token");
+                window.location.href = "http://localhost:8888/login";
+            }
+            else{
+                alert("退出登录失败: " + data.message);
+            }
+        })
 }
 
 document.addEventListener("DOMContentLoaded", function() {

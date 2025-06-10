@@ -46,5 +46,4 @@ public class VoteDetailController {
         return voteService.voteFor(voteId, voteOptionId, userId, ticketId);
     }
 
-    //撤销投票 (删除)
 }

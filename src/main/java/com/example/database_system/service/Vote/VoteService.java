@@ -255,8 +255,6 @@ public class VoteService {
         ||vote.get().getEndTime().before(new Timestamp(System.currentTimeMillis()))){
             return ResponseMessage.error(null,"not in vote time",HttpStatus.BAD_REQUEST.value());
         }
-
-
         //查看当前用户是否允许投票
         //统计当前用户在当前投票中投的所有票 (如果该用户的投票达到了投票上限就不再允许投票
         var statisticUserVoteRecordCountGroupByTicketRes = voteRecordRepository.findByUserAndVoteAndTicket(

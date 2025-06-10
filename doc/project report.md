@@ -41,7 +41,15 @@
 投票系统需要对用户进行相应的访问控制，即不同的用户无法访问或修改其他用户的投票数据。同时用户也无法冒充其他用户进行投票行为。
 并且为了方便投票的管理，需要提供管理员权限的用户可以对所有投票进行管理，包括删除、修改等操作。
 
-### 2.5 用户界面可视化
+### 2.5 用户身份验证
+由于投票系统是基于B/S架构，因此用户的请求是无状态的，为了防止非法的请求行为，需要在受保护的页面或者请求中对用户进行身份验证。
+本系统采用的是``JWT``（JSON Web Token）进行用户身份验证，具体包括：
++ 在用户登录时生成一个JWT令牌，存储在后端的临时哈希容器中，并返回令牌给前端。
++ 前端获取令牌后，后续在必要的请求中携带该令牌。
++ 后端在请求中解析JWT令牌，验证令牌的合法性和有效性，以实现用户身份识。
++ 当用户登出后，删除前端的令牌存储，同时删除后端的令牌存储，防止重放攻击.
+
+### 2.6 用户界面可视化
 投票系统需要提供一个友好的用户界面，方便用户进行投票操作。具体包括：
 + 登录注册页面，用户可以在该页面中注册新用户或登录已有用户。
 + 首页，显示所有投票信息，包括投票标题、创建者、创建时间、投票状态等，方便用户浏览和参与投票。
@@ -272,6 +280,8 @@ create table if not exists vote_system.tb_vote_define_record
 
 ##### 3.1.3.2 参照完整性
 上述的数据库表结构中，所有的外键都被设置为非空且引用了其他表的主键，因此满足参照完整性要求。
+同时，由于表``tb_vote_define_record``中的外键引用了表``tb_vote``的主键，所以在删除投票时，使用对应的删除标记，而非进行级联删除。
+
 
 #### 3.1.4 数据索引设计
 为了加速查询操作，在常用的表结构中添加了索引。
@@ -307,27 +317,305 @@ create index idx_user_vote
 
 #### 3.1.5 事务设计
 由于本项目是一个线上投票系统，涉及到用户注册、登录、投票等操作，因此需要设计事务来保证数据的一致性和完整性。
-对于只读
+对于如用户注册，投票创建，投票等涉及并发以及数据库删改操作的数据操作，则利用数据库的事务机制对相应的函数进行处理，以保证在数据操作过程中数据的一致性。
+
+在``Spring boot``中利用``@Transactional``注解来标记需要进行事务处理的方法，Spring会自动为这些方法创建事务，并在方法执行完毕后提交事务，如果方法执行过程中发生异常，则会回滚事务，保证数据的一致性。
 
 ### 3.2 软件架构设计
+本项目采用前后端分离的B/S软件架构，后端由``spring boot``作为服务器框架，以``Mysql``数据库进行数据存储。同时前端采用``HTML``布局，``CSS``样式化，``JS``页面逻辑控制的实现。
 
 #### 3.2.1 前端页面设计
+项目前端采取``HTML + CSS + JS``的设计方式，利用``JS``控制页面逻辑，并且与后端接口进行交互，从而实现前端的数据获取和展示功能。
+
+前端采取简单的``MVC``控制以获取对应的网页，并且设计简单的页面路由：
+
+```
+localhost:8888{
+  
+}
+```
 
 #### 3.2.2 后端接口层设计
+本项目使用``Spring Boot``作为后端框架，提供``RESTful API``接口供前端调用。
+
+根据需求分析，将接口层分为
++ 用户相关接口
++ 投票相关接口
++ 票据相关接口
++ 投票记录相关接口
++ 其余功能接口(如文件URL获取、网页路由等)
+
+##### 3.2.2.1 用户相关接口
++ 用户注册接口 `POST /register/api/register`
++ 用户登录接口 `POST /login/api/login`
+
+##### 3.2.2.2 投票相关接口
++ 投票创建接口 `POST /vote/api/create`
++ 获取投票接口 `GET /vote/api/all-vote`
++ 删除投票接口 `DELETE /vote/api/delete/{voteId}`
++ 搜索投票接口 `GET /vote/api/search/keyword={keyword}`
++ 获取用户创建的投票接口 `GET /vote/api/get-vote-by-user`
++ 获取投票详情接口 `GET /vote-detail/api/vote={voteId}`
++ 提交投票接口 `POST /vote-detail/api/vote/vote={voteId}/vote-option={voteOptionId}/ticket={ticketId}`
+
+##### 3.2.2.3 票据相关接口
++ 获取所有票据接口 `GET /ticket/api/get-all-ticket`
++ 获取当前用户可用票据接口 `GET /ticket/api/get-vote-tickets/{voteId}`
+
+##### 3.2.2.4 投票记录相关接口
++ 获取用户投票记录接口 `GET /vote-log/api/get-vote-log`
 
 #### 3.2.3 后端服务层设计
-
-#### 3.2.4 后端数据访问层设计
+后端服务层主要负责业务逻辑的处理，调用数据访问层进行数据的增删改查操作。
+根据上述接口，将服务层分为
++ 用户服务层
+  + 提供用户的注册、登录验证、用户信息获取等服务
++ 投票服务层
+  + 提供投票创建、投票获取、投票删除等服务
++ 票据服务层
+  + 提供票据查询服务
++ 投票记录服务层
+  + 提供投票记录查询服务
 
 ## 4 功能实现
 
 ### 4.1 关键代码实现
 
+#### 4.1.1 用户创建(注册)
+```java
+@Transactional
+public ResponseMessage<LoginRegisterUserDto> RegisterUser(LoginRegisterUserDto loginRegisterUserDto) {
+    var user = new User();
+    user.setAccount(loginRegisterUserDto.getAccount());
+    user.setPassword(securityConfig.passwordEncoder().encode(loginRegisterUserDto.getPassword()));
+    user.setRole(loginRegisterUserDto.getRole());
+    user.setName(user.getAccount());
+    if (userRepository.findByaccount(user.getAccount()).isPresent()) {
+        //账户名冲突
+        return ResponseMessage.error(loginRegisterUserDto, "账户名已存在，请更换账户名", HttpStatus.BAD_REQUEST.value());
+    } else {
+        userRepository.save(user);
+        return ResponseMessage.success(loginRegisterUserDto, "注册成功，请登录");
+    }
+}
+```
+
+```sql
+insert 
+into
+    tb_user
+    (account, name, password, role, id) 
+values
+    (kotori, kotori, $2a$10$I9G8Fc9/21Csi2WSWKXXi.OMgEa.GnxJBAs60tTwZz13TMJz52n3e, USER, ccb873da-03e9-427f-9253-2560fd65f528);
+```
+
+#### 4.1.2 用户登录
+```java
+public ResponseMessage<LoginRegisterUserDto> LoginUser(LoginRegisterUserDto loginRegisterUserDto) {
+    var user = new User();
+    user.setAccount(loginRegisterUserDto.getAccount());
+    user.setPassword(securityConfig.passwordEncoder().encode(loginRegisterUserDto.getPassword()));
+    user.setRole(loginRegisterUserDto.getRole());
+    var savedUser = userRepository.findByaccount(user.getAccount());
+    if (savedUser.isPresent()) {
+        if (securityConfig.passwordEncoder().matches(loginRegisterUserDto.getPassword(), savedUser.get().getPassword())) {
+            loginRegisterUserDto.setToken(jwtUtils.generateToken(savedUser.get()));
+            TokenStorage.storeToken(savedUser.get().getAccount(), loginRegisterUserDto.getToken());
+            return ResponseMessage.success(loginRegisterUserDto, "登录成功");
+        } else {
+            return ResponseMessage.error(loginRegisterUserDto, "密码错误", HttpStatus.BAD_REQUEST.value());
+        }
+    } else {
+        return ResponseMessage.error(loginRegisterUserDto, "账户名不存在", HttpStatus.BAD_REQUEST.value());
+    }
+}
+```
+```sql
+select
+    u1_0.id,
+    u1_0.account,
+    u1_0.name,
+    u1_0.password,
+    u1_0.role 
+from
+    tb_user u1_0 
+where
+    u1_0.id=kotori;
+```
+
+#### 4.1.3 创建投票
+```java
+@Transactional
+public ResponseMessage<UUID> createVote(List<VoteOptionDto> voteOptionDtoList, VoteDto voteDto, UUID userId, List<TicketLimitDto> ticketLimitDtoList) {
+    if (voteOptionDtoList.isEmpty()) {
+        return ResponseMessage.error(null, "Empty vote options", HttpStatus.BAD_REQUEST.value());
+    }
+    //创建投票
+    var creator = userRepository.findById(userId);
+    if (creator.isEmpty()) {
+        return ResponseMessage.error(null, "Creator not exist", HttpStatus.BAD_REQUEST.value());
+    }
+    Vote newVote = new Vote();
+    newVote.setTitle(voteDto.getTitle());
+    newVote.setDescription(voteDto.getDescription());
+    newVote.setStartTime(voteDto.getStartTime());
+    newVote.setEndTime(voteDto.getEndTime());
+    newVote.setCreatorId(creator.get());
+
+    voteRepository.save(newVote);
+    //创建投票选项
+    for (VoteOptionDto voteOptionDto : voteOptionDtoList) {
+        VoteOption newVoteOption = new VoteOption();
+        newVoteOption.setPosition(voteOptionDto.getPosition());
+        newVoteOption.setDescription(voteOptionDto.getDescription());
+        newVoteOption.setVote(newVote);
+        voteOptionRepository.save(newVoteOption);
+
+        if(voteOptionDto.getResourceUrl() != null && !voteOptionDto.getResourceUrl().isEmpty()) {
+            //如果有资源链接就设置
+            OptionResource optionResource = new OptionResource();
+            optionResource.setUrl(voteOptionDto.getResourceUrl());
+            optionResource.setVoteOption(newVoteOption);
+            optionResource.setType("image"); // 默认类型为图片
+            optionResourceRepository.save(optionResource);
+        }
+    }
+
+    //新建一个票数限制
+    for (TicketLimitDto ticketLimitDto : ticketLimitDtoList) {
+        //存储
+        TicketLimit ticketLimit = new TicketLimit();
+        var ticket = ticketRepository.findById(ticketLimitDto.getTicketId());
+        if (ticket.isEmpty()) {
+            return ResponseMessage.error(null, "ticket not exist", HttpStatus.BAD_REQUEST.value());
+        }
+        ticketLimit.setTicket(ticket.get());
+        ticketLimit.setCount(ticketLimitDto.getVoteCount());
+        ticketLimit.setVote(newVote);
+
+        ticketLimitRepository.save(ticketLimit);
+    }
+
+    //新增一条log
+    VoteDefineRecord voteDefineRecord = new VoteDefineRecord("CREATE", new Timestamp(System.currentTimeMillis()), creator.get(), newVote);
+    voteDefineLogRepository.save(voteDefineRecord);
+    return ResponseMessage.success(newVote.getId(), "Create vote success");
+}
+```
+
+```sql
+start transaction;
+
+# 新建投票
+insert
+into
+  tb_vote
+  (creator_id, is_delete, description, end_time, start_time, title, id)
+values
+  (ccb873da-03e9-427f-9253-2560fd65f528, false, 选择你喜欢的书籍进行投票吧！, 2025-06-12 01:01:00.0, 2025-06-10 11:56:00.0, 书籍投票, 812d1268-3389-428f-8d9e-3546f546a03c)
+
+# 插入投票选项
+insert
+into
+  tb_vote_option
+  (description, position, vote_id, vote_count, id)
+values
+  (巴黎圣母院, 1, 812d1268-3389-428f-8d9e-3546f546a03c, 0, e60aff5a-e445-4379-98af-35afa6d971ea);
+
+# 省略其他选项
+
+# 插入投票限制
+insert
+into
+  tb_vote_limit
+  (count, ticket_id, vote_id, id)
+values
+  (1, 31000000-0000-0000-0000-000000000000, 812d1268-3389-428f-8d9e-3546f546a03c, 767067a8-8a1e-4e23-8ca6-d46349682be3);
+
+#省略其他票限制
+
+# 插入投票定义记录
+insert
+into
+  tb_vote_define_record
+  (operation, user_id, time, vote_id, id)
+values
+  (CREATE, ccb873da-03e9-427f-9253-2560fd65f528, 2025-06-10 11:57:40.317, 812d1268-3389-428f-8d9e-3546f546a03c, dbe4e8c0-b607-462e-b244-bb7ed8cfc9b0);
+
+commit;
+```
+
+#### 4.1.4 用户投票
+```java
+@Transactional
+public ResponseMessage<Integer> voteFor(UUID voteId, UUID voteOptionId, UUID userId, UUID ticketId) {
+    //查看投票的东西是否存在
+    var user = userRepository.findById(userId);
+    var vote = voteRepository.findById(voteId);
+    var voteOption = voteOptionRepository.findById(voteOptionId);
+    var ticket = ticketRepository.findById(ticketId);
+    if (user.isEmpty() || vote.isEmpty() || voteOption.isEmpty() || ticket.isEmpty()) {
+        return ResponseMessage.error(null, "Something not exist", HttpStatus.BAD_REQUEST.value());
+    }
+    //查看投票是否结束 or 开始
+    if(vote.get().getStartTime().after(new Timestamp(System.currentTimeMillis()))
+    ||vote.get().getEndTime().before(new Timestamp(System.currentTimeMillis()))){
+        return ResponseMessage.error(null,"not in vote time",HttpStatus.BAD_REQUEST.value());
+    }
+    //查看当前用户是否允许投票
+    //统计当前用户在当前投票中投的所有票 (如果该用户的投票达到了投票上限就不再允许投票
+    var statisticUserVoteRecordCountGroupByTicketRes = voteRecordRepository.findByUserAndVoteAndTicket(
+            user.get(),
+            vote.get(),
+            ticket.get());
+    if(statisticUserVoteRecordCountGroupByTicketRes == null){
+        statisticUserVoteRecordCountGroupByTicketRes = new VoteRecord();
+        statisticUserVoteRecordCountGroupByTicketRes.setUser(user.get());
+        statisticUserVoteRecordCountGroupByTicketRes.setVote(vote.get());
+        statisticUserVoteRecordCountGroupByTicketRes.setTicket(ticket.get());
+        statisticUserVoteRecordCountGroupByTicketRes.setVoteCount(0);
+        statisticUserVoteRecordCountGroupByTicketRes.setVoteId(
+                new VoteRecordId(user.get().getId(), vote.get().getId(), ticket.get().getId())
+        );
+    }
+
+    Integer limitCount = ticketLimitRepository.findByVoteAndTicket(vote.get(), ticket.get()).getCount();
+    if (statisticUserVoteRecordCountGroupByTicketRes.getVoteCount() >= limitCount) {
+        return ResponseMessage.error(null, "Reach this ticket limit count", HttpStatus.BAD_REQUEST.value());
+    }
+    //投票
+    VoteOptionRecord voteOptionRecord = new VoteOptionRecord();
+    voteOptionRecord.setVoteOption(voteOption.get());
+    voteOptionRecord.setTicket(ticket.get());
+    voteOptionRecord.setVoter(user.get());
+    voteOptionRecord.setTime(new Timestamp(System.currentTimeMillis()));
+
+    voteOption.get().addVoteCount(ticket.get().getWeight());
+    //记录投票
+    statisticUserVoteRecordCountGroupByTicketRes.addVoteCount(1);
+    voteOptionRecordRepository.save(voteOptionRecord);
+    voteRecordRepository.save(statisticUserVoteRecordCountGroupByTicketRes);
+    return ResponseMessage.success(limitCount - statisticUserVoteRecordCountGroupByTicketRes.getVoteCount(), "success");
+}
+```
+
 ### 4.2 数据处理逻辑
 
 ## 5 功能展示
-
+本项目的功能展示主要分为三个部分：前端页面展示、接口功能展示和数据库相关操作展示。
 ### 5.1 前端页面展示
+
+#### 5.1.1 登录注册页面
+![img_2.png](img_2.png)
+#### 5.1.2 首页
+![img_3.png](img_3.png)
+#### 5.1.3 创建投票页面
+![img_4.png](img_4.png)
+#### 5.1.4 投票页面
+![img_5.png](img_5.png)
+![img_6.png](img_6.png)
+#### 5.1.5 投票记录页面
+![img_7.png](img_7.png)
 
 ### 5.2 接口功能展示
 

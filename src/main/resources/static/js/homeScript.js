@@ -29,7 +29,7 @@ function generateVoteLink(data) {
                             ${
             vote.isTimeout
                 ? `<p class="vote-item-timeout">已超时</p>`
-                : new Date(vote.startTime) > new Date()
+                : new Date(vote.endTime) > new Date()
                     ? `<p class="vote-item-timeout">未开始</p>`
                     : `<p class="vote-item-timeout">进行中</p>`
         }

@@ -24,7 +24,6 @@ public class VoteRecordService {
         this.voteOptionRecordRepository = voteOptionRecordRepository;
     }
 
-    //此处不需要@Transactional注解，因为只进行了一次数据库查询操作
     public ResponseMessage<List<VoteRecordDto>> getVoteLog(UUID userId) {
         List<VoteRecordDto> voteRecordDtoList = new ArrayList<>();
         var voteRecords = voteOptionRecordRepository.findByUserId(userId);
